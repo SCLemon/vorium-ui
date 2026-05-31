@@ -1,0 +1,62 @@
+/* 設計系統變數 */
+
+:root {
+  /* Background */
+
+  --v-surface-primary: white;
+  --v-surfaces-danger:#f53434;
+  --v-surfaces-warning: #e6a23c;
+  --v-surfaces-success: #67c23a;
+  --v-surfaces-info: #3b82f6;
+  --v-surfaces-ghost: black;
+
+  /* hover Background */
+  --v-surfaces-hover:rgba(255,255,255,0.1);
+
+  /* Disabled Backgorund */
+  --v-surfaces-primary-disabled: rgba(255,255,255,1);
+  --v-surfaces-danger-disabled: rgb(249, 91, 91);
+  --v-surfaces-warning-disabled: #ecb35e;
+  --v-surfaces-success-disabled: #86c069;
+  --v-surfaces-info-disabled: #71a5f8;
+  --v-surfaces-ghost-disabled: rgb(39, 39, 39);
+ 
+  /* Text */
+  --v-text-white: white;
+  --v-text-black: black; 
+  --v-text-gray: rgba(220, 220, 220);  /* Using when disabled */
+
+
+  /* border */
+  --v-border: 0.1px solid rgba(255,255,255,0.15);
+
+
+  /* Typography */
+  --v-font-family: Inter, "SF Pro Display", sans-serif;
+
+
+  /* font-size */
+  --v-font-xs: 12px;
+  --v-font-sm: 14px;
+  --v-font-md: 16px;
+  --v-font-lg: 18px;
+  --v-font-xl: 20px;
+  
+  /* height */
+  --v-height-xs: 26px;
+  --v-height-sm: 32px;
+  --v-height-md: 34px;
+  --v-height-lg: 38px;
+  --v-height-xl: 42px;
+  
+  /* border-radius */
+  --v-button-border-radius: 3px;
+
+  /* transition */
+  --v-transition-fast: 100ms ease;
+
+  /* :before hover */
+  --v-surfaces-hover:rgba(255,255,255,0.1);
+  --v-opacity-hover: 1;
+  --v-opacity-active: 0;
+}

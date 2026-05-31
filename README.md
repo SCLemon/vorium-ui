@@ -15,7 +15,7 @@
 </p>
 
 <p align="center">
-  <img src="./docs/theme.png" alt="VORIUM UI Preview">
+  <img src="./assets/theme.png" alt="VORIUM UI Preview">
 </p>
 
 ---

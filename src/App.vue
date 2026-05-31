@@ -1,26 +1,46 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div class="stage">
+    
+    <VButton type="ghost" :disabled="true" :circle="true" size="sm" :isLoading="true">G</VButton>
+    <br><br>
+    <VButton type="danger" size="md" :isLoading="true">
+    </VButton>
+    <br><br>
+    <VButton type="warning" :circle="true" size="sm">
+      <VIcon :icon="ExclamationIcon" :size="18"></VIcon>
+    </VButton>
+    <br><br>
+    <VButton type="success" :disabled="true" :circle="true" size="xl">S</VButton>
+    <br><br>
+
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+
+import VButton from './components/foundation/VButton.vue';
+import VIcon from './components/foundation/VIcon.vue';
+import { ExclamationIcon } from '@/icons/index.js';
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    VButton, VIcon
+  },
+  setup(){
+    return {
+      ExclamationIcon
+    }
   }
 }
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+body{
+  background: black;
+}
+.stage{
+  padding-left: 20px;
+  padding-top: 20px
 }
 </style>
