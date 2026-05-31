@@ -23,7 +23,7 @@
 
 <script>
 import { LoadingIcon } from '@/icons/index.js';
-import VIcon from '@/components/foundation/VIcon.vue';
+import VIcon from '@/components/VIcon.vue';
 import { computed } from 'vue';
 export default {
   name: 'VButton',

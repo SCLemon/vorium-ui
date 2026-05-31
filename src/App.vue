@@ -18,8 +18,8 @@
 
 <script>
 
-import VButton from './components/foundation/VButton.vue';
-import VIcon from './components/foundation/VIcon.vue';
+import VButton from './components/VButton.vue';
+import VIcon from './components/VIcon.vue';
 import { ExclamationIcon } from '@/icons/index.js';
 
 export default {
