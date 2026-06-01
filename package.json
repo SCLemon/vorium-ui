@@ -14,7 +14,7 @@
       "require": "./dist/icons/icons.common.js",
       "default": "./dist/icons/icons.common.js"
     },
-
+    "./icons/icons.css": "./dist/icons/icons.css",
     "./dist/vorium-ui.css": "./dist/vorium-ui.css"
   },
 
