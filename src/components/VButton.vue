@@ -139,7 +139,7 @@ export default {
 .v-button--primary:not(:disabled):hover{
     color: white;
     background: var(--v-surfaces-hover-primary);
-    border: 1px solid white;
+    border: 0.1px solid white;
 }
 
 .v-button--danger {
