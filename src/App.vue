@@ -1,10 +1,10 @@
 <template>
   <div class="stage">
-    <div class="set-demo-box-item"><VButton type="primary" size="md" :loading="true" >Primary</VButton></div>
-    <div class="set-demo-box-item"><VButton type="success" size="md" :loading="true" >Success</VButton></div>
-    <div class="set-demo-box-item"><VButton type="warning" size="md" :loading="true" >Warning</VButton></div>
-    <div class="set-demo-box-item"><VButton type="danger" size="md" :loading="true" >Danger</VButton></div>
-    <div class="set-demo-box-item"><VButton type="ghost" size="md" :loading="true" >Ghost</VButton></div>
+    <div class="set-demo-box-item"><VButton type="primary" size="md"  :loading="loading" :loadingText="percent +'%'" @click="click()">Primary</VButton></div>
+    <div class="set-demo-box-item"><VButton type="success" size="md"  :loading="loading" :loadingText="percent +'%'" @click="click()">Success</VButton></div>
+    <div class="set-demo-box-item"><VButton type="warning" size="md" :loading="loading" :loadingText="percent +'%'" @click="click()" >Warning</VButton></div>
+    <div class="set-demo-box-item"><VButton type="danger" size="md"  :loading="loading" :loadingText="percent +'%'" @click="click()">Danger</VButton></div>
+    <div class="set-demo-box-item"><VButton type="ghost" size="md" :loading="loading" :loadingText="percent +'%'" @click="click()" >Ghost</VButton></div>
     </div>
 </template>
 

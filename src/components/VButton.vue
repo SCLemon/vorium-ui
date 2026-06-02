@@ -15,7 +15,7 @@
 
     <template v-if="loading">
         <VIcon :icon="loadingIcon" :size="iconSize"></VIcon>
-        <div v-if="!circle" :class="`v-button-loading-text--${size}`">{{ loadingText }}</div>
+        <div v-if="!circle" class="v-button-loading-text" :class="`v-button-loading-text--${size}`">{{ loadingText }}</div>
     </template>
 
     <slot v-else></slot>
@@ -101,6 +101,7 @@ export default {
     border: var(--v-border);
     border-radius: var(--v-button-border-radius);
     overflow: hidden;
+    font-variant-numeric: tabular-nums;
 }
 
 .v-button:not(:disabled):hover{
@@ -254,6 +255,9 @@ export default {
 
 .is-loading{
     cursor: wait !important;
+}
+.v-button-loading-text{
+    min-width: 4ch;
 }
 .v-button-loading-text--xs{
     margin-left: 12px;
