@@ -3,17 +3,19 @@
     class="v-button" 
     :class="[ 
         `v-button--${type}`,`v-button--${size}`,
-        { [`is-disabled--${type}`]: disabled, 
-            'is-disabled': disabled || isLoading,
-            'is-loading': isLoading,
-            'is-circle': circle 
+        { 
+            [`is-disabled--${type}`]: disabled || loading, 
+            'is-disabled': disabled || loading,
+            'is-loading': loading,
+            'is-circle': circle,
+            'is-round': round
         }
     ]" 
-    :disabled="disabled || isLoading">
+    :disabled="disabled || loading">
 
-    <template v-if="isLoading">
-        <VIcon :icon="LoadingIcon" :size="iconSize"></VIcon>
-        <div v-if="!circle" class="v-button-loading-text">{{ loadingText }}</div>
+    <template v-if="loading">
+        <VIcon :icon="loadingIcon" :size="iconSize"></VIcon>
+        <div v-if="!circle" :class="`v-button-loading-text--${size}`">{{ loadingText }}</div>
     </template>
 
     <slot v-else></slot>
@@ -22,9 +24,11 @@
 </template>
 
 <script>
-import { LoadingIcon } from '@/icons/index.js';
+
 import VIcon from '@/components/VIcon.vue';
+import { LoadingIcon } from '@/icons/index.js';
 import { computed } from 'vue';
+
 export default {
   name: 'VButton',
   components:{
@@ -37,23 +41,32 @@ export default {
     },
     size: {
         type: String,
-        default: 'xs',
+        default: 'md',
     },
     disabled: {
         type: Boolean,
         default: false,
     },
+    // cirle 優先級較 round 高
     circle:{
         type: Boolean,
         default: false
     },
-    isLoading:{
+    round:{
+        type: Boolean,
+        default: false,
+    },
+    loading:{
         type: Boolean,
         default: false,
     },
     loadingText:{
         type: String,
-        default: '運行中'
+        default: 'Loading'
+    },
+    loadingIcon:{
+        type:Object,
+        default:() => LoadingIcon
     }
   },
 
@@ -66,13 +79,18 @@ export default {
     const iconSize = computed(() => sizeMap[props.size] || 16)
 
     return {
-        LoadingIcon, VIcon, iconSize
+        VIcon, iconSize
     }
   }
 }
 </script>
 
 <style>
+
+/* =========================
+   Common
+========================= */
+
 .v-button {
     display: inline-flex;
     justify-content: center;
@@ -100,12 +118,14 @@ export default {
     pointer-events: none;
 }
 
-.v-button:hover::before {
+.v-button:not(:disabled):hover::before {
     opacity: var(--v-opacity-hover);
 }
-.v-button:active::before{
+.v-button:not(:disabled):active::before{
     opacity: var(--v-opacity-active);
 }
+
+
 
 /* =========================
    Variants
@@ -114,6 +134,11 @@ export default {
 .v-button--primary {
     background: var(--v-surface-primary);
     color: var(--v-text-black);
+}
+.v-button--primary:not(:disabled):hover{
+    color: white;
+    background: var(--v-surfaces-hover-primary);
+    border: 1px solid white;
 }
 
 .v-button--danger {
@@ -205,14 +230,23 @@ export default {
 }
 
 /* =========================
+   Round
+========================= */
+
+.is-round{
+    border-radius: var(--v-border-radius-round);
+}
+
+/* =========================
    Circle
 ========================= */
 
 .is-circle{
     padding:0;
     aspect-ratio: 1/1;
-    border-radius: 50%;
+    border-radius: var(--v-border-radius-circle);
 }
+
 
 /* =========================
    Loading
@@ -221,8 +255,20 @@ export default {
 .is-loading{
     cursor: wait !important;
 }
-.v-button-loading-text{
+.v-button-loading-text--xs{
     margin-left: 12px;
+}
+.v-button-loading-text--sm{
+    margin-left: 14px;
+}
+.v-button-loading-text--md{
+    margin-left: 16px;
+}
+.v-button-loading-text--lg{
+    margin-left: 18px;
+}
+.v-button-loading-text--xl{
+    margin-left: 20px;
 }
 
 </style>

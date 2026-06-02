@@ -7,11 +7,12 @@
   --v-surfaces-danger:#f53434;
   --v-surfaces-warning: #e6a23c;
   --v-surfaces-success: #67c23a;
-  --v-surfaces-info: #3b82f6;
+  --v-surfaces-info: #409eff;
   --v-surfaces-ghost: black;
 
   /* hover Background */
   --v-surfaces-hover:rgba(255,255,255,0.1);
+  --v-surfaces-hover-primary:rgba(0,0,0);
 
   /* Disabled Backgorund */
   --v-surfaces-primary-disabled: rgba(255,255,255,1);
@@ -21,14 +22,20 @@
   --v-surfaces-info-disabled: #71a5f8;
   --v-surfaces-ghost-disabled: rgb(39, 39, 39);
  
+  /* border */
+  --v-border: 0.1px solid rgba(255,255,255,0.15);
+
+  /* border-radius */
+  --v-button-border-radius: 3px;
+
+  /* border-radius round/circle */
+  --v-border-radius-round: 9999px;
+  --v-border-radius-circle: 9999px;
+
   /* Text */
   --v-text-white: white;
   --v-text-black: black; 
   --v-text-gray: rgba(220, 220, 220);  /* Using when disabled */
-
-
-  /* border */
-  --v-border: 0.1px solid rgba(255,255,255,0.15);
 
 
   /* Typography */
@@ -43,14 +50,11 @@
   --v-font-xl: 20px;
   
   /* height */
-  --v-height-xs: 26px;
-  --v-height-sm: 32px;
-  --v-height-md: 34px;
-  --v-height-lg: 38px;
-  --v-height-xl: 42px;
-  
-  /* border-radius */
-  --v-button-border-radius: 3px;
+  --v-height-xs: 30px;
+  --v-height-sm: 34px;
+  --v-height-md: 38px;
+  --v-height-lg: 42px;
+  --v-height-xl: 46px;
 
   /* transition */
   --v-transition-fast: 100ms ease;
@@ -59,4 +63,5 @@
   --v-surfaces-hover:rgba(255,255,255,0.1);
   --v-opacity-hover: 1;
   --v-opacity-active: 0;
+
 }
