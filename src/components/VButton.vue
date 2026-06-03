@@ -4,11 +4,11 @@
     :class="[ 
         `v-button--${type}`,`v-button--${size}`,
         { 
-            [`is-disabled--${type}`]: disabled || loading, 
-            'is-disabled': disabled || loading,
-            'is-loading': loading,
-            'is-circle': circle,
-            'is-round': round
+            [`v-button-is-disabled--${type}`]: disabled || loading, 
+            'v-button-is-disabled': disabled || loading,
+            'v-button-is-loading': loading,
+            'v-button-is-circle': circle,
+            'v-button-is-round': round
         }
     ]" 
     :disabled="disabled || loading">
@@ -74,7 +74,7 @@ export default {
 
     // loading 圖案大小
     const sizeMap = {
-        xs: 12, sm: 14, md: 16, lg: 18, xl: 20,
+        xs: 10, sm: 12, md: 14, lg: 16, xl: 18,
     }
     const iconSize = computed(() => sizeMap[props.size] || 16)
 
@@ -99,7 +99,7 @@ export default {
     position: relative;
     box-sizing: border-box;
     border: var(--v-border);
-    border-radius: var(--v-button-border-radius);
+    border-radius: var(--v-border-radius);
     overflow: hidden;
     font-variant-numeric: tabular-nums;
 }
@@ -115,7 +115,7 @@ export default {
     opacity: 0;
     background: var(--v-surfaces-hover);
     transition: opacity var(--v-transition-fast);
-    border-radius: var(--v-button-border-radius);
+    border-radius: var(--v-border-radius);
     pointer-events: none;
 }
 
@@ -168,30 +168,30 @@ export default {
    Disabled
 ========================= */
 
-.is-disabled {
+.v-button-is-disabled {
     color: var(--v-text-gray);
     cursor: not-allowed !important;
 }
-.is-disabled:hover::before{
+.v-button-is-disabled:hover::before{
     opacity: 0 !important;
 }
 
-.is-disabled--primary{
+.v-button-is-disabled--primary{
     background: var(--v-surfaces-primary-disabled);
 }
-.is-disabled--danger{
+.v-button-is-disabled--danger{
     background: var(--v-surfaces-danger-disabled);
 }
-.is-disabled--warning{
+.v-button-is-disabled--warning{
     background: var(--v-surfaces-warning-disabled);
 }
-.is-disabled--success{
+.v-button-is-disabled--success{
     background: var(--v-surfaces-success-disabled);
 }
-.is-disabled--info{
+.v-button-is-disabled--info{
     background: var(--v-surfaces-info-disabled);
 }
-.is-disabled--ghost{
+.v-button-is-disabled--ghost{
     background: var(--v-surfaces-ghost-disabled);
 }
 
@@ -202,31 +202,31 @@ export default {
 
 .v-button--xs {
     padding: 0 16px;
-    height: var(--v-height-xs);
+    height: var(--v-button-height-xs);
     font-size: var(--v-font-xs);
 }
 
 .v-button--sm {
     padding: 0 18px;
-    height:  var(--v-height-sm);
+    height:  var(--v-button-height-sm);
     font-size: var(--v-font-sm);
 }
 
 .v-button--md {
     padding: 0 20px;
-    height: var(--v-height-md);
+    height: var(--v-button-height-md);
     font-size: var(--v-font-md);
 }
 
 .v-button--lg {
     padding: 0 22px;
-    height: var(--v-height-lg);
+    height: var(--v-button-height-lg);
     font-size: var(--v-font-lg);
 }
 
 .v-button--xl {
     padding: 0 24px;
-    height: var(--v-height-xl);
+    height: var(--v-button-height-xl);
     font-size: var(--v-font-xl);
 }
 
@@ -234,7 +234,7 @@ export default {
    Round
 ========================= */
 
-.is-round{
+.v-button-is-round{
     border-radius: var(--v-border-radius-round);
 }
 
@@ -242,7 +242,7 @@ export default {
    Circle
 ========================= */
 
-.is-circle{
+.v-button-is-circle{
     padding:0;
     aspect-ratio: 1/1;
     border-radius: var(--v-border-radius-circle);
@@ -253,7 +253,7 @@ export default {
    Loading
 ========================= */
 
-.is-loading{
+.v-button-is-loading{
     cursor: wait !important;
 }
 .v-button-loading-text{

@@ -26,7 +26,7 @@
   --v-border: 0.1px solid rgba(255,255,255,0.15);
 
   /* border-radius */
-  --v-button-border-radius: 3px;
+  --v-border-radius: 3px;
 
   /* border-radius round/circle */
   --v-border-radius-round: 9999px;
@@ -43,18 +43,30 @@
 
 
   /* font-size */
-  --v-font-xs: 12px;
-  --v-font-sm: 14px;
-  --v-font-md: 16px;
-  --v-font-lg: 18px;
-  --v-font-xl: 20px;
+  --v-button-font-xs: 12px;
+  --v-button-font-sm: 14px;
+  --v-button-font-md: 16px;
+  --v-button-font-lg: 18px;
+  --v-button-font-xl: 20px;
+
+  --v-input-font-xs: 10px;
+  --v-input-font-sm: 12px;
+  --v-input-font-md: 14px;
+  --v-input-font-lg: 16px;
+  --v-input-font-xl: 18px;
   
   /* height */
-  --v-height-xs: 30px;
-  --v-height-sm: 34px;
-  --v-height-md: 38px;
-  --v-height-lg: 42px;
-  --v-height-xl: 46px;
+  --v-button-height-xs: 30px;
+  --v-button-height-sm: 34px;
+  --v-button-height-md: 38px;
+  --v-button-height-lg: 42px;
+  --v-button-height-xl: 46px;
+  
+  --v-input-height-xs: 32px;
+  --v-input-height-sm: 36px;
+  --v-input-height-md: 40px;
+  --v-input-height-lg: 44px;
+  --v-input-height-xl: 48px;
 
   /* transition */
   --v-transition-fast: 100ms ease;

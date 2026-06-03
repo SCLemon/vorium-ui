@@ -1,49 +1,62 @@
 <template>
   <div class="stage">
-    <div class="set-demo-box-item"><VButton type="primary" size="md"  :loading="loading" :loadingText="percent +'%'" @click="click()">Primary</VButton></div>
-    <div class="set-demo-box-item"><VButton type="success" size="md"  :loading="loading" :loadingText="percent +'%'" @click="click()">Success</VButton></div>
-    <div class="set-demo-box-item"><VButton type="warning" size="md" :loading="loading" :loadingText="percent +'%'" @click="click()" >Warning</VButton></div>
-    <div class="set-demo-box-item"><VButton type="danger" size="md"  :loading="loading" :loadingText="percent +'%'" @click="click()">Danger</VButton></div>
-    <div class="set-demo-box-item"><VButton type="ghost" size="md" :loading="loading" :loadingText="percent +'%'" @click="click()" >Ghost</VButton></div>
+    <div class="input-demo">
+      <VInput size="md" v-model="keyword" :suggestionList="suggestionList" :suggestionListIsLoading="isLoading"></VInput>
     </div>
+    <div class="input-demo">
+      <VInput size="md" v-model="keyword" type="password"></VInput>
+    </div>
+  </div>
 </template>
 
 <script>
 
-import { ref, onUnmounted } from 'vue';
-import VButton from './components/VButton.vue';
+import { ref, reactive, watch } from 'vue';
+import VInput from './components/VInput/VInput.vue';
 
 export default {
   name: 'App',
   components: {
-    VButton
+    VInput
   },
   setup(){
 
-    let percent = ref(0);
-    let loading = ref(false);
+    let list = ["無骨鹽酥雞","醬烤雞排","蜜汁大雞腿","炭烤雞翅","香酥雞皮","椒鹽魷魚","酥炸花枝丸","韓式炸雞","蒜香豆干","黃金地瓜條","炸米血糕","酥脆雞米花","炭烤雞屁股","起司雞排","梅粉地瓜球"];
+    let suggestionList = reactive([]);
+    let keyword = ref('');
+
     let timer = null;
+    let isLoading = ref(false);
+    let requestId = 0;
 
-    // Allows progress status to be displayed within the button during loading.
-    function click(){
-      loading.value = true;
-      timer = setInterval(() => {
+    watch(()=> keyword.value, (value)=>{
 
-        percent.value += parseInt(Math.random()*5 + 1);
-        if(percent.value >= 100){
-          clearInterval(timer);
-          loading.value = false;
-          percent.value = 0;
-        }
-      }, 100);
-    }
+      clearTimeout(timer);
 
-    onUnmounted(()=>{
-      if(timer) clearInterval(timer)
-    })
+      timer = setTimeout(async ()=>{
+
+        const currentId = ++requestId;
+
+        isLoading.value = true;
+
+        const filterList = list.filter((i) => i.includes(value));
+
+        await new Promise((resolve, reject)=>{ 
+          setTimeout(() => {resolve()}, 1000)
+        })
+
+        if(currentId != requestId) return;
+
+        suggestionList.splice(0,suggestionList.length, ...filterList);
+
+        isLoading.value = false;
+
+      }, 300)
+
+    }, { immediate: true })
 
     return {
-      percent, loading, click
+      keyword, isLoading, suggestionList
     }
   }
 }
@@ -58,7 +71,9 @@ body{
   padding-top: 20px;
   display: flex;
 }
-.set-demo-box-item{
-  margin-left: 10px;
+.input-demo{
+  width: 250px;
+  margin-right: 10px;
 }
+
 </style>
