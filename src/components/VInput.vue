@@ -1,5 +1,6 @@
 <template>
-  <div class="v-input-wrapper" :class="[`v-input-wrapper--${size}`,{'v-input-wrapper-is-disabled': disabled}]" @mouseenter="isHover = true" @mouseleave="isHover = false">
+  <div class="v-input-wrapper" :class="[`v-input-wrapper--${size}`,
+    {'v-input-wrapper-is-disabled': disabled, 'v-input-wrapper-is-focus': isFocus && hasBorder,'v-input-wrapper-is-round': round && hasBorder, 'v-input-wrapper-has-border': hasBorder}]" @mouseenter="isHover = true" @mouseleave="isHover = false">
     <VIcon class="v-input-wrapper-icon" v-if="showIcon" :icon="icon" :size="iconSize"></VIcon>
     <div class="v-input-box">
         <input ref="input_element" class="v-input" :class="[`v-input-${size}`]" 
@@ -9,10 +10,12 @@
             <VIcon v-if="clearable && (type!='password' || !showPassword)" class="v-input-icon" :icon="CloseIcon" :size="iconSize" @mousedown.prevent  @click.stop="clear()"></VIcon>
             <VIcon v-else-if="(type == 'password' && showPassword)" class="v-input-icon" :icon="passwordIsOpen?EyeOffIcon:EyeIcon" :size="iconSize" @mousedown.prevent  @click.stop="togglePassword()"></VIcon>
         </div>
-        <div v-if="(!isFocus && !disabledHotKey)" class="v-input-send-button-wrapper" :class="[`v-input-send-button-wrapper-${size}`]">Ctrl+{{ hotKey }}</div>
+        <div v-if="(!isFocus && !disabledHotKey)" class="v-input-send-button-wrapper" :class="[`v-input-send-button-wrapper-${size}`,{'v-input-send-button-wrapper-is-round': round}]">Ctrl+{{ hotKey }}</div>
     </div>
-    <div v-if="isFocus && (suggestionList.length || suggestionListIsLoading)" class="v-input-suggestion-list-wrapper" :class="[`v-input-suggestion-list-wrapper-${suggestionListDirection}`, `v-input-suggestion-list-wrapper-${size}`]">
-        <div v-if="!suggestionListIsLoading" class="v-input-suggestion-list-item" :class="[`v-input-suggestion-list-item-${size}`]" @mousedown.prevent @click.stop="setValueFromSuggestion(item)" v-for="(item, i) in suggestionList" :key="i">
+    <div v-if="isFocus && !disabled && type!='password' && (suggestionList.length || suggestionListIsLoading)" class="v-input-suggestion-list-wrapper" 
+        :class="[`v-input-suggestion-list-wrapper-${suggestionListDirection}`, `v-input-suggestion-list-wrapper-${size}`]">
+        <div v-if="!suggestionListIsLoading" class="v-input-suggestion-list-item" :class="[`v-input-suggestion-list-item-${size}`]" 
+            @mousedown.prevent @click.stop="setValueFromSuggestion(item)" v-for="(item, i) in suggestionList" :key="i">
             <div class="v-input-suggestion-list-text">{{ item }}</div>
         </div>
         <div v-else class="v-input-suggestion-list-item v-input-suggestion-list-item-is-loading" :class="[`v-input-suggestion-list-item-${size}`]" @mousedown.prevent>
@@ -24,7 +27,7 @@
 
 <script>
 import { onMounted, onUnmounted,computed, useModel, ref } from 'vue';
-import VIcon from '../VIcon.vue';
+import VIcon from './VIcon.vue';
 import { SearchIcon, CloseIcon, EyeIcon, EyeOffIcon, LoadingIcon } from '@/icons/index.js';
 export default {
     name:'VInput',
@@ -46,6 +49,14 @@ export default {
         type: {
             type: String,
             default: 'text'
+        },
+        round:{
+            type: Boolean,
+            default: false
+        },
+        hasBorder:{
+            type: Boolean,
+            default: true
         },
         disabled:{
             type: Boolean,
@@ -162,9 +173,17 @@ export default {
     align-items: center;
     padding: 5px 10px;
     color: white;
+    background: var(--v-surfaces-ghost);
+}
+.v-input-wrapper-has-border{
     border: var(--v-border);
     border-radius: var(--v-border-radius);
-    background: var(--v-surfaces-ghost);
+}
+.v-input-wrapper-is-focus{
+    border: var(--v-border-white);
+}
+.v-input-wrapper-is-round{
+    border-radius: var(--v-border-radius-round);
 }
 .v-input-box{
     width: 100%;
@@ -200,7 +219,9 @@ export default {
     align-items: center;
     justify-content: center;
 }
-
+.v-input-send-button-wrapper-is-round{
+    border-radius: var(--v-border-radius-round);
+}
 /* =========================
    Disabled
 ========================= */
@@ -284,6 +305,7 @@ export default {
     border: var(--v-border);
     background: var(--v-surfaces-ghost);
     box-sizing: border-box;
+    z-index: 1;
 }
 .v-input-suggestion-list-wrapper-top{
     bottom: calc(100% + 10px);

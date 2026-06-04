@@ -24,6 +24,7 @@
  
   /* border */
   --v-border: 0.1px solid rgba(255,255,255,0.15);
+  --v-border-white: 0.1px solid rgba(255,255,255,0.3);
 
   /* border-radius */
   --v-border-radius: 3px;

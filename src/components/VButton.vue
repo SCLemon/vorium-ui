@@ -7,6 +7,7 @@
             [`v-button-is-disabled--${type}`]: disabled || loading, 
             'v-button-is-disabled': disabled || loading,
             'v-button-is-loading': loading,
+            'v-button-is-loading-primary': type == 'primary',
             'v-button-is-circle': circle,
             'v-button-is-round': round
         }
@@ -203,31 +204,31 @@ export default {
 .v-button--xs {
     padding: 0 16px;
     height: var(--v-button-height-xs);
-    font-size: var(--v-font-xs);
+    font-size: var(--v-button-font-xs);
 }
 
 .v-button--sm {
     padding: 0 18px;
     height:  var(--v-button-height-sm);
-    font-size: var(--v-font-sm);
+    font-size: var(--v-button-font-sm);
 }
 
 .v-button--md {
     padding: 0 20px;
     height: var(--v-button-height-md);
-    font-size: var(--v-font-md);
+    font-size: var(--v-button-font-md);
 }
 
 .v-button--lg {
     padding: 0 22px;
     height: var(--v-button-height-lg);
-    font-size: var(--v-font-lg);
+    font-size: var(--v-button-font-lg);
 }
 
 .v-button--xl {
     padding: 0 24px;
     height: var(--v-button-height-xl);
-    font-size: var(--v-font-xl);
+    font-size: var(--v-button-font-xl);
 }
 
 /* =========================
@@ -254,8 +255,61 @@ export default {
 ========================= */
 
 .v-button-is-loading{
+    position: relative;
+    overflow: hidden;
     cursor: wait !important;
 }
+
+
+.v-button-is-loading::after{
+    content: "";
+    position: absolute;
+    inset: 0;
+
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(255,255,255,.05) 30%,
+        rgba(255,255,255,.15) 40%,
+        rgba(255,255,255,.4) 50%,
+        rgba(255,255,255,.15) 60%,
+        rgba(255,255,255,.05) 70%,
+        transparent 100%
+    );
+
+    transform: translateX(-100%);
+    animation: v-button-loading-scan 4.4s linear infinite;
+
+    pointer-events: none;
+}
+
+.v-button-is-loading-primary::after{
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(0,0,0,.02) 30%,
+        rgba(0,0,0,.05) 40%,
+        rgba(0,0,0,.15) 50%,
+        rgba(0,0,0,.05) 60%,
+        rgba(0,0,0,.02) 70%,
+        transparent 100%
+    );
+}
+
+@keyframes v-button-loading-scan{
+    0%{
+        transform: translateX(-100%);
+    }
+
+    75%{
+        transform: translateX(100%);
+    }
+
+    100%{
+        transform: translateX(100%);
+    }
+}
+
 .v-button-loading-text{
     min-width: 4ch;
 }

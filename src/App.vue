@@ -4,20 +4,27 @@
       <VInput size="md" v-model="keyword" :suggestionList="suggestionList" :suggestionListIsLoading="isLoading"></VInput>
     </div>
     <div class="input-demo">
-      <VInput size="md" v-model="keyword" type="password"></VInput>
+      <VInput size="md" v-model="keyword" :hasBorder="true" type="password" :showIcon="false"></VInput>
     </div>
+    <!-- <div class="input-demo">
+      <VButton size="md" :loading="true"></VButton>
+      <VButton size="md" :loading="true" type="info"></VButton>
+      <VButton size="md" :loading="true" type="warning"></VButton>
+      <VButton size="md" :loading="true" type="ghost"></VButton>
+      <VButton size="md" :loading="true" round type="danger"></VButton>
+    </div> -->
   </div>
 </template>
 
 <script>
 
 import { ref, reactive, watch } from 'vue';
-import VInput from './components/VInput/VInput.vue';
-
+import VInput from './components/VInput.vue';
+import VButton from './components/VButton.vue';
 export default {
   name: 'App',
   components: {
-    VInput
+    VInput, VButton
   },
   setup(){
 
