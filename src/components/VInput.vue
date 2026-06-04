@@ -10,7 +10,12 @@
             <VIcon v-if="clearable && (type!='password' || !showPassword)" class="v-input-icon" :icon="CloseIcon" :size="iconSize" @mousedown.prevent  @click.stop="clear()"></VIcon>
             <VIcon v-else-if="(type == 'password' && showPassword)" class="v-input-icon" :icon="passwordIsOpen?EyeOffIcon:EyeIcon" :size="iconSize" @mousedown.prevent  @click.stop="togglePassword()"></VIcon>
         </div>
-        <div v-if="(!isFocus && !disabledHotKey)" class="v-input-send-button-wrapper" :class="[`v-input-send-button-wrapper-${size}`,{'v-input-send-button-wrapper-is-round': round}]">Ctrl+{{ hotKey }}</div>
+        <div>
+            <div v-if="(!isFocus && !disabledHotKey && !(hasActionSlot && modelValue))" class="v-input-send-button-wrapper" :class="[`v-input-send-button-wrapper-${size}`,{'v-input-send-button-wrapper-is-round': round}]">Ctrl+{{ hotKey }}</div>
+            <div class="v-input-action-slot-wrapper" v-else-if="hasActionSlot && modelValue">
+                <slot name="action"></slot>
+            </div>
+        </div>
     </div>
     <div v-if="isFocus && !disabled && type!='password' && (suggestionList.length || suggestionListIsLoading)" class="v-input-suggestion-list-wrapper" 
         :class="[`v-input-suggestion-list-wrapper-${suggestionListDirection}`, `v-input-suggestion-list-wrapper-${size}`]">
@@ -153,8 +158,11 @@ export default {
             input_element.value.blur();
         }
 
+        // action slot
+        const hasActionSlot = computed(() => !!context.slots.action);
+
         return{
-            model, input_element, isFocus, isHover, iconSize, CloseIcon, LoadingIcon, EyeIcon, EyeOffIcon, clear, togglePassword, setValueFromSuggestion, passwordIsOpen
+            model, hasActionSlot, input_element, isFocus, isHover, iconSize, CloseIcon, LoadingIcon, EyeIcon, EyeOffIcon, clear, togglePassword, setValueFromSuggestion, passwordIsOpen
         }
     }
 }
@@ -387,5 +395,14 @@ export default {
 .v-input-suggestion-list-item-is-loading:hover{
     background: none;
     cursor: wait;
+}
+
+/* =========================
+   Action-slot
+========================= */
+
+.v-input-action-slot-wrapper{
+    margin-left: 10px;
+    white-space: nowrap;
 }
 </style>
