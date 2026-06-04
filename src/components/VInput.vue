@@ -1,6 +1,6 @@
 <template>
   <div class="v-input-wrapper" :class="[`v-input-wrapper--${size}`,
-    {'v-input-wrapper-is-disabled': disabled, 'v-input-wrapper-is-focus': isFocus && hasBorder,'v-input-wrapper-is-round': round && hasBorder, 'v-input-wrapper-has-border': hasBorder}]" @mouseenter="isHover = true" @mouseleave="isHover = false">
+    {'v-input-wrapper-is-disabled': disabled,'v-input-wrapper-is-disabled-is-round': disabled && round, 'v-input-wrapper-is-focus': isFocus && hasBorder,'v-input-wrapper-is-round': round && hasBorder, 'v-input-wrapper-has-border': hasBorder}]" @mouseenter="isHover = true" @mouseleave="isHover = false">
     <VIcon class="v-input-wrapper-icon" v-if="showIcon" :icon="icon" :size="iconSize"></VIcon>
     <div class="v-input-box">
         <input ref="input_element" class="v-input" :class="[`v-input-${size}`]" 
@@ -17,14 +17,15 @@
             </div>
         </div>
     </div>
-    <div v-if="isFocus && !disabled && type!='password' && (suggestionList.length || suggestionListIsLoading)" class="v-input-suggestion-list-wrapper" 
-        :class="[`v-input-suggestion-list-wrapper-${suggestionListDirection}`, `v-input-suggestion-list-wrapper-${size}`]">
-        <div v-if="!suggestionListIsLoading" class="v-input-suggestion-list-item" :class="[`v-input-suggestion-list-item-${size}`]" 
-            @mousedown.prevent @click.stop="setValueFromSuggestion(item)" v-for="(item, i) in suggestionList" :key="i">
-            <div class="v-input-suggestion-list-text">{{ item }}</div>
-        </div>
-        <div v-else class="v-input-suggestion-list-item v-input-suggestion-list-item-is-loading" :class="[`v-input-suggestion-list-item-${size}`]" @mousedown.prevent>
-            <VIcon :icon="LoadingIcon" :size="iconSize"></VIcon>
+    <div v-if="isFocus && !disabled && type!='password' && (suggestionList.length || suggestionListIsLoading)" class="v-input-suggestion-list-wrapper-with-triangle" :class="[`v-input-suggestion-list-wrapper-with-triangle-${suggestionListDirection}`, `v-input-suggestion-list-wrapper-with-triangle-${suggestionListDirection}-${size}`]">
+        <div class="v-input-suggestion-list-wrapper" :class="[`v-input-suggestion-list-wrapper-${size}`]" >
+            <div v-if="!suggestionListIsLoading" class="v-input-suggestion-list-item" :class="[`v-input-suggestion-list-item-${size}`]" 
+                @mousedown.prevent @click.stop="setValueFromSuggestion(item)" v-for="(item, i) in suggestionList" :key="i">
+                <div class="v-input-suggestion-list-text">{{ item }}</div>
+            </div>
+            <div v-else class="v-input-suggestion-list-item v-input-suggestion-list-item-is-loading" :class="[`v-input-suggestion-list-item-${size}`]" @mousedown.prevent>
+                <VIcon :icon="LoadingIcon" :size="iconSize"></VIcon>
+            </div>
         </div>
     </div>
   </div>
@@ -247,6 +248,9 @@ export default {
     border-radius: var(--v-border-radius);
     cursor: not-allowed;
 }
+.v-input-wrapper-is-disabled-is-round::before{
+    border-radius: var(--v-border-radius-round);
+}
 
 /* =========================
    Size
@@ -301,35 +305,163 @@ export default {
 }
 
 /* =========================
+   SuggestionList Popper
+========================= */
+
+.v-input-suggestion-list-wrapper-with-triangle{
+    position: absolute;
+    height: auto;
+    width: 100%;
+    box-sizing: border-box;
+    z-index: 1;
+    border: var(--v-border);
+    border-radius: var(--v-border-radius);
+    background: var(--v-surfaces-ghost);
+}
+
+.v-input-suggestion-list-wrapper-with-triangle-top{
+    bottom: calc(100% + 10px);
+    left: 0;
+}
+.v-input-suggestion-list-wrapper-with-triangle-bottom{
+    top: calc(100% + 10px);
+    left: 0;
+}
+.v-input-suggestion-list-wrapper-with-triangle-left{
+    top:0;
+    right: calc(100% + 10px);
+}
+.v-input-suggestion-list-wrapper-with-triangle-right{
+    top:0;
+    left: calc(100% + 10px);
+}
+
+.v-input-suggestion-list-wrapper-with-triangle::before,
+.v-input-suggestion-list-wrapper-with-triangle::after{
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+}
+.v-input-suggestion-list-wrapper-with-triangle-bottom::before{
+    left: 50%;
+    top: -8px;
+    transform: translateX(-50%);
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 8px solid rgba(255,255,255,.15);
+}
+.v-input-suggestion-list-wrapper-with-triangle-bottom::after{
+    left: 50%;
+    top: -6px;
+    transform: translateX(-50%);
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent;
+    border-bottom: 7px solid var(--v-surfaces-ghost);
+}
+
+.v-input-suggestion-list-wrapper-with-triangle-top::before{
+    left: 50%;
+    bottom: -8px;
+    transform: translateX(-50%);
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-top: 8px solid rgba(255,255,255,.15);
+}
+.v-input-suggestion-list-wrapper-with-triangle-top::after{
+    left: 50%;
+    bottom: -6px;
+    transform: translateX(-50%);
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent;
+    border-top: 7px solid var(--v-surfaces-ghost);
+}
+.v-input-suggestion-list-wrapper-with-triangle-left::before{
+    right: -8px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    border-left: 8px solid rgba(255,255,255,.15);
+}
+
+.v-input-suggestion-list-wrapper-with-triangle-left::after{
+    right: -6px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-top: 7px solid transparent;
+    border-bottom: 7px solid transparent;
+    border-left: 7px solid var(--v-surfaces-ghost);
+}
+.v-input-suggestion-list-wrapper-with-triangle-right::before{
+    left: 50%;
+    top: -8px;
+    transform: translateX(-50%);
+}
+.v-input-suggestion-list-wrapper-with-triangle-right::before{
+    left: -8px;
+    transform: translateY(-50%);
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    border-right: 8px solid rgba(255,255,255,.15);
+}
+.v-input-suggestion-list-wrapper-with-triangle-right::after{
+    left: -6px;
+    transform: translateY(-50%);
+    border-top: 7px solid transparent;
+    border-bottom: 7px solid transparent;
+    border-right: 7px solid var(--v-surfaces-ghost);
+}
+.v-input-suggestion-list-wrapper-with-triangle-right-xs::before,
+.v-input-suggestion-list-wrapper-with-triangle-left-xs::before{
+    top: calc(0.5 * var(--v-input-height-xs));
+}
+.v-input-suggestion-list-wrapper-with-triangle-right-xs::after,
+.v-input-suggestion-list-wrapper-with-triangle-left-xs::after{
+    top: calc(0.5 * var(--v-input-height-xs));
+}
+.v-input-suggestion-list-wrapper-with-triangle-right-sm::before,
+.v-input-suggestion-list-wrapper-with-triangle-left-sm::before{
+    top: calc(0.5 * var(--v-input-height-sm));
+}
+.v-input-suggestion-list-wrapper-with-triangle-right-sm::after,
+.v-input-suggestion-list-wrapper-with-triangle-left-sm::after{
+    top: calc(0.5 * var(--v-input-height-sm));
+}
+.v-input-suggestion-list-wrapper-with-triangle-right-md::before,
+.v-input-suggestion-list-wrapper-with-triangle-left-md::before{
+    top: calc(0.5 * var(--v-input-height-md));
+}
+.v-input-suggestion-list-wrapper-with-triangle-right-md::after,
+.v-input-suggestion-list-wrapper-with-triangle-left-md::after{
+    top: calc(0.5 * var(--v-input-height-md));
+}
+.v-input-suggestion-list-wrapper-with-triangle-right-lg::before,
+.v-input-suggestion-list-wrapper-with-triangle-left-lg::before{
+    top: calc(0.5 * var(--v-input-height-lg));
+}
+.v-input-suggestion-list-wrapper-with-triangle-right-lg::after,
+.v-input-suggestion-list-wrapper-with-triangle-left-lg::after{
+    top: calc(0.5 * var(--v-input-height-lg));
+}
+.v-input-suggestion-list-wrapper-with-triangle-right-xl::before,
+.v-input-suggestion-list-wrapper-with-triangle-left-xl::before{
+    top: calc(0.5 * var(--v-input-height-xl));
+}
+.v-input-suggestion-list-wrapper-with-triangle-right-xl::after,
+.v-input-suggestion-list-wrapper-with-triangle-left-xl::after{
+    top: calc(0.5 * var(--v-input-height-xl));
+}
+
+/* =========================
    SuggestionList
 ========================= */
 
 .v-input-suggestion-list-wrapper{
-    position: absolute;
     width: 100%;
-    height: auto;
     color: white;
     overflow-y: scroll;
-    border: var(--v-border);
-    background: var(--v-surfaces-ghost);
     box-sizing: border-box;
-    z-index: 1;
-}
-.v-input-suggestion-list-wrapper-top{
-    bottom: calc(100% + 10px);
-    left: 0;
-}
-.v-input-suggestion-list-wrapper-bottom{
-    top: calc(100% + 10px);
-    left: 0;
-}
-.v-input-suggestion-list-wrapper-left{
-    top:0;
-    right: calc(100% + 10px);
-}
-.v-input-suggestion-list-wrapper-right{
-    top:0;
-    left: calc(100% + 10px);
 }
 
 .v-input-suggestion-list-wrapper-xs{
@@ -352,6 +484,10 @@ export default {
     font-size: var(--v-input-font-xl);
     max-height: calc(4 * var(--v-input-height-xl));
 }
+
+/* =========================
+   SuggestionList Item
+========================= */
 
 .v-input-suggestion-list-item{
     box-sizing: border-box;

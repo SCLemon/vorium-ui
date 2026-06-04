@@ -1,7 +1,34 @@
 <template>
   <div class="stage">
     <div class="input-demo">
-      <VInput size="md" v-model="keyword" round :hotKey="'P'" placeholder="Cutsom Slot">
+      <VInput size="xs" v-model="keyword" round :hotKey="'P'" :suggestionList="list" placeholder="Cutsom Slot">
+        <template #action>
+          <VButton type="ghost" size="xs" round :loading="true">
+            <VIcon :icon="SendIcon"></VIcon>
+          </VButton>
+        </template>
+      </VInput>
+    </div>
+        <div class="input-demo">
+      <VInput size="sm" v-model="keyword" :suggestionListDirection="'left'" round :hotKey="'P'" :suggestionList="list" placeholder="Cutsom Slot">
+        <template #action>
+          <VButton type="ghost" size="xs" round>
+            <VIcon :icon="SendIcon"></VIcon>
+          </VButton>
+        </template>
+      </VInput>
+    </div>
+        <div class="input-demo">
+      <VInput size="lg" v-model="keyword" :suggestionListDirection="'right'" round :hotKey="'P'" :suggestionList="list" placeholder="Cutsom Slot">
+        <template #action>
+          <VButton type="ghost" size="xs" round>
+            <VIcon :icon="SendIcon"></VIcon>
+          </VButton>
+        </template>
+      </VInput>
+    </div>
+        <div class="input-demo">
+      <VInput :disabled="true" size="xl" v-model="keyword" :suggestionListDirection="'top'" round :hotKey="'P'" :suggestionList="list" placeholder="Cutsom Slot">
         <template #action>
           <VButton type="ghost" size="xs" round>
             <VIcon :icon="SendIcon"></VIcon>
@@ -25,9 +52,10 @@ export default {
     VInput, VButton, VIcon
   },
   setup(){
+    let list = ref(['test','test2','test3','test4','test'])
     let keyword = ref('');
     return {
-      keyword, SendIcon
+      keyword, SendIcon, list
     }
   }
 }

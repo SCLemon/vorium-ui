@@ -16,7 +16,7 @@
 
     <template v-if="loading">
         <VIcon :icon="loadingIcon" :size="iconSize"></VIcon>
-        <div v-if="!circle" class="v-button-loading-text" :class="`v-button-loading-text--${size}`">{{ loadingText }}</div>
+        <div v-if="!circle" class="v-button-loading-text" :class="[`v-button-loading-text--${size}`,{'v-button-loading-text-no-content': loadingText.trim()==''}]">{{ loadingText }}</div>
     </template>
 
     <slot v-else></slot>
@@ -312,6 +312,9 @@ export default {
 
 .v-button-loading-text{
     min-width: 4ch;
+}
+.v-button-loading-text-no-content{
+    display: none;
 }
 .v-button-loading-text--xs{
     margin-left: 12px;
