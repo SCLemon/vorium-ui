@@ -1,40 +1,10 @@
 <template>
   <div class="stage">
     <div class="input-demo">
-      <VInput size="xs" v-model="keyword" round :hotKey="'P'" :suggestionList="list" placeholder="Cutsom Slot">
-        <template #action>
-          <VButton type="ghost" size="xs" round :loading="true">
-            <VIcon :icon="SendIcon"></VIcon>
-          </VButton>
-        </template>
-      </VInput>
-    </div>
-        <div class="input-demo">
-      <VInput size="sm" v-model="keyword" :suggestionListDirection="'left'" round :hotKey="'P'" :suggestionList="list" placeholder="Cutsom Slot">
-        <template #action>
-          <VButton type="ghost" size="xs" round>
-            <VIcon :icon="SendIcon"></VIcon>
-          </VButton>
-        </template>
-      </VInput>
-    </div>
-        <div class="input-demo">
-      <VInput size="lg" v-model="keyword" :suggestionListDirection="'right'" round :hotKey="'P'" :suggestionList="list" placeholder="Cutsom Slot">
-        <template #action>
-          <VButton type="ghost" size="xs" round>
-            <VIcon :icon="SendIcon"></VIcon>
-          </VButton>
-        </template>
-      </VInput>
-    </div>
-        <div class="input-demo">
-      <VInput :disabled="true" size="xl" v-model="keyword" :suggestionListDirection="'top'" round :hotKey="'P'" :suggestionList="list" placeholder="Cutsom Slot">
-        <template #action>
-          <VButton type="ghost" size="xs" round>
-            <VIcon :icon="SendIcon"></VIcon>
-          </VButton>
-        </template>
-      </VInput>
+      <VButton>test</VButton>
+      <VButton type="ghost">test</VButton>
+      <VButton :disabled="true">test</VButton>
+      <VButton :loading="true">test</VButton>
     </div>
   </div>
 </template>

@@ -136,11 +136,18 @@ export default {
 .v-button--primary {
     background: var(--v-surface-primary);
     color: var(--v-text-black);
+    transition: all 0.2s linear;
 }
 .v-button--primary:not(:disabled):hover{
     color: white;
     background: var(--v-surfaces-hover-primary);
-    border: 0.1px solid white;
+    border: 0.1px solid rgba(190,190,190);
+}
+.v-button--primary:not(:disabled):hover::before{
+    opacity: 0;
+}
+.v-button--primary:not(:disabled):active::before{
+    opacity: 1;
 }
 
 .v-button--danger {
@@ -287,11 +294,11 @@ export default {
     background: linear-gradient(
         90deg,
         transparent 0%,
-        rgba(0,0,0,.02) 30%,
-        rgba(0,0,0,.05) 40%,
-        rgba(0,0,0,.15) 50%,
-        rgba(0,0,0,.05) 60%,
-        rgba(0,0,0,.02) 70%,
+        rgba(0,0,0,.03) 30%,
+        rgba(0,0,0,.06) 40%,
+        rgba(0,0,0,.10) 50%,
+        rgba(0,0,0,.06) 60%,
+        rgba(0,0,0,.03) 70%,
         transparent 100%
     );
 }
