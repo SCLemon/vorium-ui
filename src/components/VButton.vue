@@ -115,7 +115,7 @@ export default {
     inset: 0;
     opacity: 0;
     background: var(--v-surfaces-hover);
-    transition: opacity var(--v-transition-fast);
+    transition: opacity 0.25s linear;
     border-radius: var(--v-border-radius);
     pointer-events: none;
 }
@@ -136,7 +136,7 @@ export default {
 .v-button--primary {
     background: var(--v-surface-primary);
     color: var(--v-text-black);
-    transition: all 0.2s linear;
+    transition: all 0.25s linear;
 }
 .v-button--primary:not(:disabled):hover{
     color: white;

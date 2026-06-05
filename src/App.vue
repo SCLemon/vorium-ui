@@ -2,7 +2,7 @@
   <div class="stage">
     <div class="input-demo">
       <VButton>test</VButton>
-      <VButton type="ghost">test</VButton>
+      <VButton type="ghost">View Components</VButton>
       <VButton :disabled="true">test</VButton>
       <VButton :loading="true">test</VButton>
     </div>

@@ -69,12 +69,14 @@
   --v-input-height-lg: 44px;
   --v-input-height-xl: 48px;
 
-  /* transition */
-  --v-transition-fast: 100ms ease;
 
   /* :before hover */
   --v-surfaces-hover:rgba(255,255,255,0.1);
   --v-opacity-hover: 1;
   --v-opacity-active: 0;
 
+}
+
+*::-webkit-scrollbar{
+	display: none;
 }
