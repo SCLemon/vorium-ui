@@ -19,8 +19,7 @@
 
 <script>
 import { onMounted, onUnmounted, watch, ref, computed } from 'vue'
-// import * as monaco from 'monaco-editor'
-import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
+import * as monaco from 'monaco-editor'
 import VIcon from './VIcon.vue';
 import CopyIcon from '../icons/CopyIcon.vue';
 import CheckIcon from '@/icons/CheckIcon.vue';
@@ -180,11 +179,6 @@ export default {
         const editorWrapper = ref()
         let editorInstance = null;
 
-
-        if(props.modelValue ==''){
-            context.emit('update:modelValue',props.placeholder)
-        }
-
         const editorConfig = {
             value: props.modelValue,
             language: props.language,
@@ -225,6 +219,10 @@ export default {
             // 初始化創建
             editorInstance = monaco.editor.create(editor.value, editorConfig)
             calculateAutoResizeHeight();
+
+            if(props.modelValue == ''){
+                context.emit('update:modelValue',props.placeholder)
+            }
 
             // 監聽頁面內容變動
             editorInstance.onDidChangeModelContent(
@@ -322,7 +320,7 @@ export default {
 <style>
 .v-code-editor-wrapper-with-header{
     width: 100%;
-    height: auto;
+    height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: top;
@@ -340,11 +338,11 @@ export default {
     padding-left: 20px;
     padding-right: 20px;
     box-sizing: border-box;
-    border-radius: var(--v-border-radius) var(--v-border-radius) 0 0;
+    border-radius: 3px 3px 0 0;
 }
 .v-code-editor-header-dark{
     background: rgba(255,255,255,0.1);
-    color: var(--v-text-gray);
+    color: rgba(220, 220, 220);
 }
 .v-code-editor-header-light{
     background: white;
