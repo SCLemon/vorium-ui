@@ -5,6 +5,9 @@ module.exports = defineConfig({
   publicPath: './',
   lintOnSave: false,
   configureWebpack: {
+    optimization: {
+      splitChunks: false,
+    },
     plugins: [
       new MonacoWebpackPlugin({
         languages: [

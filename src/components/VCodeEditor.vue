@@ -1,6 +1,6 @@
 <template>
     <div class="v-code-editor-wrapper-with-header">
-        <div v-if="header" class="v-code-editor-header v-code-editor-header-light" :style="headerStyle">
+        <div v-if="header" :class="`v-code-editor-header v-code-editor-header-${theme}`" :style="headerStyle">
             <div class="v-code-editor-header-language">{{ headerTitle.trim() =='' ? language : headerTitle }}</div>
             <div class="v-code-editor-header-action">
                 <div v-if="!hasActionSlot">
@@ -19,7 +19,8 @@
 
 <script>
 import { onMounted, onUnmounted, watch, ref, computed } from 'vue'
-import * as monaco from 'monaco-editor'
+// import * as monaco from 'monaco-editor'
+import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
 import VIcon from './VIcon.vue';
 import CopyIcon from '../icons/CopyIcon.vue';
 import CheckIcon from '@/icons/CheckIcon.vue';
@@ -120,7 +121,7 @@ export default {
         },
         theme:{ // dark or 'light'
             type: String,
-            default: 'light'
+            default: 'dark'
         },
         placeholder:{
             type: String,
