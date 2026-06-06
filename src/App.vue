@@ -1,31 +1,25 @@
 <template>
   <div class="stage">
-    <div class="input-demo">
-      <VButton>test</VButton>
-      <VButton type="ghost">View Components</VButton>
-      <VButton :disabled="true">test</VButton>
-      <VButton :loading="true">test</VButton>
-    </div>
+    <VCodeEditor v-model="code" :autoResize="true" :minRows="1">
+    </VCodeEditor>
   </div>
 </template>
 
 <script>
 
-import { ref  } from 'vue';
-import VInput from './components/VInput.vue';
-import VButton from './components/VButton.vue';
-import VIcon from './components/VIcon.vue';
-import SendIcon from './icons/SendIcon.vue';
+import {  ref  } from 'vue';
+import VCodeEditor from './components/VCodeEditor.vue';
+import 'monaco-editor/min/vs/editor/editor.main.css'
+
 export default {
   name: 'App',
   components: {
-    VInput, VButton, VIcon
+    VCodeEditor
   },
   setup(){
-    let list = ref(['test','test2','test3','test4','test'])
-    let keyword = ref('');
+    let code = ref('')
     return {
-      keyword, SendIcon, list
+      code
     }
   }
 }
@@ -35,14 +29,18 @@ export default {
 body{
   background: black;
 }
-.stage{
-  padding-left: 20px;
-  padding-top: 20px;
-  display: flex;
+.icon{
+  cursor: pointer;
 }
-.input-demo{
-  width: 250px;
-  margin-right: 10px;
+
+.stage{
+  width: 500px;
+  height: 500px;
+  margin: 0 auto;
+  margin-top: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 </style>
