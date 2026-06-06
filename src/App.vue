@@ -1,19 +1,15 @@
 <template>
   <div class="stage">
-    <VCodeEditor v-model="code" :autoResize="true" :minRows="1">
-    </VCodeEditor>
   </div>
 </template>
 
 <script>
 
 import {  ref  } from 'vue';
-import VCodeEditor from './components/VCodeEditor.vue';
 
 export default {
   name: 'App',
   components: {
-    VCodeEditor
   },
   setup(){
     let code = ref('')
