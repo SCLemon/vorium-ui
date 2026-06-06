@@ -9,7 +9,6 @@
 
 import {  ref  } from 'vue';
 import VCodeEditor from './components/VCodeEditor.vue';
-import 'monaco-editor/min/vs/editor/editor.main.css'
 
 export default {
   name: 'App',

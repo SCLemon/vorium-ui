@@ -20,6 +20,7 @@
 <script>
 import { onMounted, onUnmounted, watch, ref, computed } from 'vue'
 import * as monaco from 'monaco-editor'
+import 'monaco-editor/min/vs/editor/editor.main.css'
 import VIcon from './VIcon.vue';
 import CopyIcon from '../icons/CopyIcon.vue';
 import CheckIcon from '@/icons/CheckIcon.vue';
