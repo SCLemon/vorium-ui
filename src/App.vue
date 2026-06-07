@@ -1,15 +1,19 @@
 <template>
   <div class="stage">
+    <VScanLight scan="light-sweep">Industrial UI System for Engineers</VScanLight>
+    <VScanLight scan="text-shimmer">Industrial UI System for Engineers</VScanLight>
   </div>
 </template>
 
 <script>
 
 import {  ref  } from 'vue';
+import VScanLight from './components/VScanLight.vue';
 
 export default {
   name: 'App',
   components: {
+    VScanLight
   },
   setup(){
     let code = ref('')
@@ -33,9 +37,7 @@ body{
   height: 500px;
   margin: 0 auto;
   margin-top: 200px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  border: 1px solid red;
 }
 
 </style>
