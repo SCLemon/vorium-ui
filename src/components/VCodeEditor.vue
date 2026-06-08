@@ -1,7 +1,9 @@
 <template>
     <div class="v-code-editor-wrapper-with-header">
         <div v-if="header" :class="`v-code-editor-header v-code-editor-header-${theme}`" :style="headerStyle">
-            <div class="v-code-editor-header-language">{{ headerTitle.trim() =='' ? language : headerTitle }}</div>
+            <div class="v-code-editor-header-language">
+                <VIcon :icon="CodeIcon"></VIcon><div class="v-code-editor-header-language-title">{{ headerTitle.trim() =='' ? language : headerTitle }}</div>
+            </div>
             <div class="v-code-editor-header-action">
                 <div v-if="!hasActionSlot">
                     <div class="v-code-editor-icon-wrapper" @click="copy()" v-if="copyStatus == 0"><VIcon :icon="CopyIcon" class="v-code-editor-icon"></VIcon>COPY</div>
@@ -24,6 +26,7 @@ import VIcon from './VIcon.vue'
 import CopyIcon from '@/icons/CopyIcon.vue'
 import CheckIcon from '@/icons/CheckIcon.vue'
 import CloseIcon from '@/icons/CloseIcon.vue'
+import CodeIcon from '@/icons/CodeIcon.vue'
 
 const sizeConfig = {
     'xs':{
@@ -331,7 +334,7 @@ export default {
 
         return {
             editor, editorWrapper, autoResizeHeight, headerStyle, CopyIcon, hasActionSlot, copy, copyStatus,
-            CheckIcon, CloseIcon
+            CheckIcon, CloseIcon, CodeIcon
         }
     }
 }
@@ -373,7 +376,13 @@ export default {
 .v-code-editor-header-action{
     margin-left: auto;
 }
-
+.v-code-editor-header-language{
+    display: flex;
+    align-items: center;
+}
+.v-code-editor-header-language-title{
+    margin-left: 10px;
+}
 .v-code-editor{
     width: 100%;
     height: 100%;

@@ -9,6 +9,7 @@
   --v-surfaces-success: #67c23a;
   --v-surfaces-info: #409eff;
   --v-surfaces-ghost: black;
+  --v-surfaces-gray: rgba(255,255,255,0.075);
 
   /* hover Background */
   --v-surfaces-hover:rgba(255,255,255,0.1);
@@ -23,8 +24,8 @@
   --v-surfaces-ghost-disabled: rgb(39, 39, 39);
  
   /* border */
-  --v-border: 0.1px solid rgba(255,255,255,0.15);
-  --v-border-white: 0.1px solid rgba(255,255,255,0.3);
+  --v-border: 0.1px solid rgba(255,255,255,0.12);
+  --v-border-white: 0.1px solid rgba(255,255,255,0.24);
 
   /* border-radius */
   --v-border-radius: 3px;

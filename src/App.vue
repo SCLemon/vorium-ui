@@ -1,19 +1,25 @@
 <template>
-  <div class="stage">
-    <VScanLight scan="light-sweep">Industrial UI System for Engineers</VScanLight>
-    <VScanLight scan="text-shimmer">Industrial UI System for Engineers</VScanLight>
+  <div class="demo-box-wrapper">
+    <VCarousel>
+      <v-carousel-item><div class="demo-box"></div></v-carousel-item>
+      <v-carousel-item><div class="demo-box">2</div></v-carousel-item>
+      <v-carousel-item><div class="demo-box">3</div></v-carousel-item>
+      <v-carousel-item><div class="demo-box">4</div></v-carousel-item>
+      <v-carousel-item><div class="demo-box">5</div></v-carousel-item>
+    </VCarousel>
   </div>
 </template>
 
 <script>
 
 import {  ref  } from 'vue';
-import VScanLight from './components/VScanLight.vue';
+import VCarousel from './components/VCarousel/VCarousel.vue';
+import VCarouselItem from './components/VCarousel/components/VCarouselItem.vue';
 
 export default {
   name: 'App',
   components: {
-    VScanLight
+    VCarousel, VCarouselItem
   },
   setup(){
     let code = ref('')
@@ -32,12 +38,19 @@ body{
   cursor: pointer;
 }
 
-.stage{
-  width: 500px;
-  height: 500px;
+.demo-box-wrapper{
+  width: 700px;
   margin: 0 auto;
   margin-top: 200px;
-  border: 1px solid red;
 }
+.demo-box{
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(255,255,255,0.07);
+  height: 100%;
+}
+
 
 </style>
