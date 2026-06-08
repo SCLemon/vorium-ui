@@ -1,7 +1,7 @@
 <template>
   <div class="demo-box-wrapper">
-    <VCarousel>
-      <v-carousel-item><div class="demo-box"></div></v-carousel-item>
+    <VCarousel :auto-play="true">
+      <v-carousel-item><div class="demo-box">1</div></v-carousel-item>
       <v-carousel-item><div class="demo-box">2</div></v-carousel-item>
       <v-carousel-item><div class="demo-box">3</div></v-carousel-item>
       <v-carousel-item><div class="demo-box">4</div></v-carousel-item>

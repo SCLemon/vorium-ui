@@ -1,12 +1,12 @@
 <template>
-    <div class="v-carousel-wrapper" :style="{ aspectRatio }" @mouseenter="isHover = true" @mouseleave="isHover = false">
+    <div class="v-carousel-wrapper" :class="{'v-carousel-wrapper-is-opacity':isOpacity}" :style="{ aspectRatio }" @mouseenter="isHover = true" @mouseleave="isHover = false">
         <div class="v-carousel-go-button-wrapper v-carousel-go-previous">
             <VButton class="v-carousel-go-button" circle type="ghost" @click.stop="goPrevious" v-if="currentIndex != 0"><VIcon :icon="ChevronLeftIcon"></VIcon></VButton>
         </div>
         <div class="v-carousel-go-button-wrapper v-carousel-go-next" >
             <VButton class="v-carousel-go-button" circle type="ghost" @click.stop="goNext" v-if="currentIndex != itemsLength - 1"><VIcon :icon="ChevronRightIcon"></VIcon></VButton>
         </div>
-        <div class="v-carousel" ref="carouselRef" :class="{'v-carousel-is-opacity':isOpacity}">
+        <div class="v-carousel" ref="carouselRef">
             <slot></slot>
         </div>
         <div class="v-carousel-indicator-wrapper" v-if="(itemsLength > 1) && indicators">
@@ -30,8 +30,8 @@ export default {
     name: 'VCarousel',
     props:{
         aspectRatio:{
-            type: String,
-            default: '16/9'
+            type: Number,
+            default: 16/9
         },
         indicators:{
             type: Boolean,
@@ -39,7 +39,7 @@ export default {
         },
         autoPlay:{
             type: Boolean,
-            default: true
+            default: false,
         },
         interval:{
             type: Number,
@@ -68,7 +68,7 @@ export default {
             const items = carouselRef.value.children;
             const next = items[currentIndex.value + 1];
             if (next) {
-                next.scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' })
+                carouselRef.value.scrollTo({ left: next.offsetLeft, behavior: 'smooth' });
                 currentIndex.value++;
             }
         }
@@ -77,7 +77,7 @@ export default {
             const items = carouselRef.value.children;
             const previous = items[currentIndex.value - 1];
             if (previous) {
-                previous.scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' })
+                carouselRef.value.scrollTo({ left: previous.offsetLeft, behavior: 'smooth' });
                 currentIndex.value--;
             }
         }
@@ -94,7 +94,9 @@ export default {
                     }, 400);
                     return
                 }
-                else section.scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' })
+                else {
+                    carouselRef.value.scrollTo({ left: section.offsetLeft, behavior: 'smooth' });
+                }
                 currentIndex.value = index;
             }
         }
@@ -170,7 +172,12 @@ export default {
     .v-carousel-wrapper{
         width: 100%;
         position: relative;
+        transition: opacity 0.35s linear;
     }
+    .v-carousel-wrapper-is-opacity{
+        opacity: 0;
+    }
+
     .v-carousel-wrapper:hover .v-carousel-go-button-wrapper{
         opacity: 1;
     }
@@ -186,14 +193,10 @@ export default {
         box-sizing: border-box;
         scroll-snap-type: x mandatory;
         opacity: 1;
-        transition: opacity 0.35s linear;
         position: relative;
         z-index: 1;
     }
-    .v-carousel-is-opacity{
-        opacity: 0;
-    }
-
+    
     /* Button */
     .v-carousel-go-button-wrapper{
         position: absolute;
