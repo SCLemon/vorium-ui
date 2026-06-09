@@ -1,8 +1,12 @@
 <template>
-  <div class="v-video-player-wrapper" :class="{'v-video-player-wrapper-fullscreen': isFullscreen}" ref="wrapperRef" :style="{ aspectRatio }">
-    <div class="v-video-header-wrapper"></div>
-    <video ref="videoRef" class="v-video-player" @click="toggleLaunch" :src="src" @loadedmetadata="onLoadedMetadata" @timeupdate="onTimeUpdate"></video>
-    <div class="v-video-controllers-wrapper">
+  <div class="v-video-player-wrapper" :class="{'v-video-player-wrapper-fullscreen': isFullscreen }" ref="wrapperRef" :style="{ aspectRatio }" 
+        @mousemove="videoPlayerMouseMove" @mouseleave="videoPlayerMouseLeave" @mouseenter="videoPlayerMouseEnter">
+
+    <div class="v-video-header-wrapper" :class="{'v-video-header-wrapper-show': showTool}" @mouseenter="isTouchingTool = true"  @mouseleave="isTouchingTool = false"></div>
+
+    <video ref="videoRef" class="v-video-player" :class="{'v-video-player-mouse-hide': !showTool}" @click="toggleLaunch" :src="src" @loadedmetadata="onLoadedMetadata" @timeupdate="onTimeUpdate"></video>
+
+    <div class="v-video-controllers-wrapper" :class="{'v-video-controllers-wrapper-show': showTool}" @mouseenter="isTouchingTool = true"  @mouseleave="isTouchingTool = false">
         <div class="v-video-controller-progress-wrapper" ref="progressWrapperRef"
             @pointerdown.stop="startDrag" @pointermove.stop="dragTo" @pointerup.stop="stopDrag" @pointercancel.stop="stopDrag">
             <div class="v-video-controller-progress-track"></div>
@@ -31,6 +35,7 @@ import FullscreenIcon from '@/icons/FullscreenIcon.vue';
 import ExitFullscreenIcon from '@/icons/ExitFullscreenIcon.vue';
 import { useVideoLaunch } from './hooks/useVideoLaunch';
 import { useVideoFullscreen } from './hooks/useVideoFullScreen'
+import { useVideoTool } from './hooks/useVideoTool';
 
 export default {
     name:'VVideoPlayer',
@@ -66,8 +71,12 @@ export default {
             return '';
         })
 
+
         // video launch
         let { isPlaying, start, pause, toggleLaunch } = useVideoLaunch(videoRef);
+
+        // 是否顯示 tool bar
+        let { isTouchingTool, videoPlayerMouseMove, videoPlayerMouseLeave, videoPlayerMouseEnter, showTool } = useVideoTool(isPlaying);
 
         // video progress
         let { duration, currentTime, progress, onLoadedMetadata, onTimeUpdate, startDrag, stopDrag, dragTo } = useVideoProgress(videoRef, progressWrapperRef, dragRef);
@@ -78,7 +87,7 @@ export default {
         return {
             src, wrapperRef, videoRef, duration, currentTime, progress, onLoadedMetadata, onTimeUpdate, start, pause,
             PlayIcon, PauseIcon, isPlaying, isFullscreen, toggleFullscreen, startDrag, stopDrag, dragTo,
-            FullscreenIcon, ExitFullscreenIcon, progressWrapperRef, toggleLaunch, dragRef
+            FullscreenIcon, ExitFullscreenIcon, progressWrapperRef, toggleLaunch, dragRef, showTool, isTouchingTool, videoPlayerMouseMove,videoPlayerMouseLeave, videoPlayerMouseEnter
         }
     }
 }
@@ -90,6 +99,7 @@ export default {
         position: relative;
         width: 100%;
         box-sizing: border-box;
+        overflow: hidden;
     }
     .v-video-player-wrapper-fullscreen{
         width: 100vw;
@@ -107,27 +117,39 @@ export default {
     .v-video-player:hover{
         cursor: pointer;
     }
+    .v-video-player-mouse-hide:hover{
+        cursor: none !important;
+    }
     .v-video-header-wrapper{
         position: absolute;
         width: 100%;
         height: 50px;
         box-sizing: border-box;
-        top:0;
+        top:-100%;
         left: 0;
         background: transparent;
         backdrop-filter: blur(1.5px);
+        transition: top 0.3s linear;
+        border: 1px solid red;
+    }
+    .v-video-header-wrapper-show{
+        top:0;
     }
     .v-video-controllers-wrapper{
         position: absolute;
         width: 100%;
-        height: 53px;
+        height: 60px;
         box-sizing: border-box;
-        bottom: 0;
+        bottom: -100%;
         left: 0;
         padding-left: 5px;
         padding-right: 5px;
         background: transparent;
         backdrop-filter: blur(1.5px);
+        transition: bottom 0.3s linear;
+    }
+    .v-video-controllers-wrapper-show{
+        bottom: 0;
     }
 
     /* Progress */
@@ -135,33 +157,32 @@ export default {
         position: relative;
         width: 100%;
         height: 13px;
-        display: flex;
-        align-items: center;
     }
+
     .v-video-controller-progress-track{
         position: absolute;
         width: 100%;
         height: 3px;
         background: rgba(255,255,255,.12);
         left: 0;
-        top: 50%;
-        transform: translateY(-50%);
+        bottom: 0;
         transition: height .15s ease;
     }
+
     .v-video-controller-progress{
         position: absolute;
         height: 3px;
         background: white;
         left: 0;
-        top: 50%;
-        transform: translateY(-50%);
+        bottom: 0;
         transition:
             width .05s linear,
             height .15s ease;
     }
+
     .v-video-controller-progress-track,
     .v-video-controller-progress{
-        transform-origin: center center;
+        transform-origin: center bottom;
     }
 
     .v-video-controller-progress-controller{
@@ -170,26 +191,28 @@ export default {
         height: 12px;
         border-radius: 50%;
         background: white;
-        top: 50%;
-        transform: translate(0%, -50%);
+        bottom: 1.5px;
+        transform: translate(0%, 50%);
         transition: transform .15s ease;
     }
 
     .v-video-controller-progress-wrapper:hover{
         cursor: pointer;
     }
+
     .v-video-controller-progress-wrapper:hover
     .v-video-controller-progress-controller{
-        transform: translate(0%, -50%) scale(1.1);
+        transform: translate(0%, 50%) scale(1.1);
     }
-    
+
     .v-video-controller-progress-wrapper:hover
     .v-video-controller-progress-track{
-        transform: translateY(-50%) scaleY(1.5);
+        transform: scaleY(1.5);
     }
+
     .v-video-controller-progress-wrapper:hover
     .v-video-controller-progress{
-        transform: translateY(-50%) scaleY(1.5);
+        transform: scaleY(1.5);
     }
 
     /* Control List */
