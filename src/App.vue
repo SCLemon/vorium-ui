@@ -1,30 +1,25 @@
 <template>
   <div class="demo-box-wrapper">
-    <VCarousel :auto-play="true">
-      <v-carousel-item><div class="demo-box">1</div></v-carousel-item>
-      <v-carousel-item><div class="demo-box">2</div></v-carousel-item>
-      <v-carousel-item><div class="demo-box">3</div></v-carousel-item>
-      <v-carousel-item><div class="demo-box">4</div></v-carousel-item>
-      <v-carousel-item><div class="demo-box">5</div></v-carousel-item>
-    </VCarousel>
+    <VVideoPlayer :source="source"></VVideoPlayer>
   </div>
 </template>
 
 <script>
 
-import {  ref  } from 'vue';
-import VCarousel from './components/VCarousel/VCarousel.vue';
-import VCarouselItem from './components/VCarousel/components/VCarouselItem.vue';
+import { reactive, ref } from 'vue';
+import VVideoPlayer from './components/VVideoPlayer/VVideoPlayer.vue';
 
 export default {
   name: 'App',
   components: {
-    VCarousel, VCarouselItem
+     VVideoPlayer
   },
   setup(){
-    let code = ref('')
+    let source = reactive({
+      '720p': 'assets/video.mp4'
+    })
     return {
-      code
+      source
     }
   }
 }
