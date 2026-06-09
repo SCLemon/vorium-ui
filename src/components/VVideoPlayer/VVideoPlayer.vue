@@ -1,10 +1,10 @@
 <template>
-  <div class="v-video-player-wrapper" :class="{'v-video-player-wrapper-fullscreen': isFullscreen }" ref="wrapperRef" :style="{ aspectRatio }" 
-        @mousemove="videoPlayerMouseMove" @mouseleave="videoPlayerMouseLeave" @mouseenter="videoPlayerMouseEnter">
+  <div class="v-video-player-wrapper" ref="wrapperRef" :style="{ aspectRatio }" 
+        @mousemove.stop="videoPlayerMouseMove" @mouseleave.stop="videoPlayerMouseLeave" @mouseenter.stop="videoPlayerMouseEnter">
 
-    <div class="v-video-header-wrapper" :class="{'v-video-header-wrapper-show': showTool}" @mouseenter="isTouchingTool = true"  @mouseleave="isTouchingTool = false"></div>
+    <div class="v-video-header-wrapper" :class="{'v-video-header-wrapper-show': showTool}" @mouseenter.stop="isTouchingTool = true"  @mouseleave.stop="isTouchingTool = false"></div>
 
-    <video ref="videoRef" class="v-video-player" :class="{'v-video-player-mouse-hide': !showTool}" @click="toggleLaunch" :src="src" @loadedmetadata="onLoadedMetadata" @timeupdate="onTimeUpdate"></video>
+    <video ref="videoRef" class="v-video-player" :class="{'v-video-player-mouse-hide': !showTool}" @click.stop="toggleLaunch" :src="src" @loadedmetadata="onLoadedMetadata" @timeupdate="onTimeUpdate"></video>
 
     <div class="v-video-controllers-wrapper" :class="{'v-video-controllers-wrapper-show': showTool}" @mouseenter="isTouchingTool = true"  @mouseleave="isTouchingTool = false">
         <div class="v-video-controller-progress-wrapper" ref="progressWrapperRef"
@@ -97,22 +97,14 @@ export default {
     /* General */
     .v-video-player-wrapper{
         position: relative;
-        width: 100%;
         box-sizing: border-box;
         overflow: hidden;
-    }
-    .v-video-player-wrapper-fullscreen{
-        width: 100vw;
-        height: 100vh;
-        position: fixed;
-        inset: 0;
-        z-index: 999999;
-        background: black;
-        aspect-ratio: auto !important;
+        display: flex;
+        align-items: center;
     }
     .v-video-player{
-        width: 100%;
-        height: 100%;
+        width: 100%; 
+        border: 0.01px solid rgba(0,0,0,1);
     }
     .v-video-player:hover{
         cursor: pointer;
@@ -130,7 +122,6 @@ export default {
         background: transparent;
         backdrop-filter: blur(1.5px);
         transition: top 0.3s linear;
-        border: 1px solid red;
     }
     .v-video-header-wrapper-show{
         top:0;
@@ -246,5 +237,6 @@ export default {
     .v-video-controller-list-fullscreen:hover{
         cursor: pointer;
     }
+
 
 </style>
