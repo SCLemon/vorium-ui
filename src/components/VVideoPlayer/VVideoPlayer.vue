@@ -138,7 +138,7 @@ export default {
     .v-video-controllers-wrapper{
         position: absolute;
         width: 100%;
-        height: 60px;
+        height: 65px;
         box-sizing: border-box;
         bottom: -100%;
         left: 0;
@@ -218,7 +218,7 @@ export default {
     /* Control List */
     .v-video-controller-list-wrapper{
         width: 100%;
-        height: 40px;
+        height: 45px;
         box-sizing: border-box;
         display: flex;
         align-items: center;
