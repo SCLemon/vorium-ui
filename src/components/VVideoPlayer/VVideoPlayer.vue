@@ -98,6 +98,7 @@ export default {
         inset: 0;
         z-index: 999999;
         background: black;
+        aspect-ratio: auto !important;
     }
     .v-video-player{
         width: 100%;
@@ -115,20 +116,18 @@ export default {
         left: 0;
         background: transparent;
         backdrop-filter: blur(1.5px);
-        z-index: 999;
     }
     .v-video-controllers-wrapper{
         position: absolute;
         width: 100%;
-        height: 50px;
+        height: 53px;
         box-sizing: border-box;
-        bottom:0;
+        bottom: 0;
         left: 0;
         padding-left: 5px;
         padding-right: 5px;
         background: transparent;
         backdrop-filter: blur(1.5px);
-        z-index: 999;
     }
 
     /* Progress */
@@ -196,7 +195,7 @@ export default {
     /* Control List */
     .v-video-controller-list-wrapper{
         width: 100%;
-        height: 47px;
+        height: 40px;
         box-sizing: border-box;
         display: flex;
         align-items: center;
@@ -224,4 +223,5 @@ export default {
     .v-video-controller-list-fullscreen:hover{
         cursor: pointer;
     }
+
 </style>
