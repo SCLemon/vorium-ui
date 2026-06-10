@@ -1,6 +1,6 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 
-export function useVideoProgress(videoRef, progressWrapperRef, dragRef){
+export function useVideoProgress(videoRef, progressWrapperRef,isPlaying){
 
     const duration = ref(0)
     const currentTime = ref(0)
@@ -13,6 +13,9 @@ export function useVideoProgress(videoRef, progressWrapperRef, dragRef){
     }
     const onTimeUpdate = () => {
         currentTime.value = videoRef.value.currentTime
+        if(currentTime.value == duration.value){
+            isPlaying.value = false; // 結束時更新狀態
+        }
     }
 
     // 快轉
@@ -37,7 +40,6 @@ export function useVideoProgress(videoRef, progressWrapperRef, dragRef){
 
     // 拖曳跳躍
     const isDragging = ref(false);
-
 
     const startDrag = (event) => {
         isDragging.value = true

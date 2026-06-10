@@ -6,20 +6,34 @@
 
     <video ref="videoRef" class="v-video-player" :class="{'v-video-player-mouse-hide': !showTool}" @click.stop="toggleLaunch" :src="src" @loadedmetadata="onLoadedMetadata" @timeupdate="onTimeUpdate"></video>
 
-    <div class="v-video-controllers-wrapper" :class="{'v-video-controllers-wrapper-show': showTool}" @mouseenter="isTouchingTool = true"  @mouseleave="isTouchingTool = false">
+    <div class="v-video-controllers-wrapper" :class="{'v-video-controllers-wrapper-fullscreen': isFullscreen, 'v-video-controllers-wrapper-show': showTool}" @mouseenter="isTouchingTool = true"  @mouseleave="isTouchingTool = false">
         <div class="v-video-controller-progress-wrapper" ref="progressWrapperRef"
             @pointerdown.stop="startDrag" @pointermove.stop="dragTo" @pointerup.stop="stopDrag" @pointercancel.stop="stopDrag">
             <div class="v-video-controller-progress-track"></div>
             <div class="v-video-controller-progress" :style="{ width: progress + '%' }"></div>
-            <div class="v-video-controller-progress-controller" ref="dragRef" :style="{ left: progress + '%' }"></div>
+            <div class="v-video-controller-progress-controller" :style="{ left: progress + '%' }"></div>
         </div>
-        <div class="v-video-controller-list-wrapper">
-            <div class="v-video-controller-list-launch" @click="isPlaying?pause():start()">
-                <VIcon :icon="isPlaying? PauseIcon : PlayIcon" :size="28"></VIcon>
+        <div class="v-video-controller-list-wrapper" :class="{'v-video-controller-list-wrapper-fullscreen': isFullscreen}">
+
+            <div class="v-video-controller-left-wrapper">
+                <div class="v-video-controller-list-launch" @click="isPlaying?pause():start()">
+                    <VIcon :icon="isPlaying? PauseIcon : PlayIcon" :size="28"></VIcon>
+                </div>
+                <div class="v-video-controller-timer">{{ formatTime(currentTime) }} / {{ formatTime(duration) }}</div>
             </div>
-            <div class="v-video-controller-list-fullscreen" @click="toggleFullscreen()">
-                <VIcon :icon="isFullscreen? ExitFullscreenIcon : FullscreenIcon" :size="20"></VIcon>
+
+            <div class="v-video-controller-right-wrapper">
+                <div class="v-video-controller-volume-wrapper">
+                    <VIcon class="v-video-controller-volume-icon" :icon="isMuted ? VolumeMuteIcon : (volume >= 50 ? VolumeHighIcon : VolumeLowIcon)" :size="20" @click="toggleMute()"></VIcon>
+                    <div class="v-video-controller-volume-lattice-wrapper">
+                        <div class="v-video-controller-volume-lattice" :class="{'v-video-controller-volume-lattice-selected': volume / 10 >= i}" v-for="i in 10" :key="i" @click.stop="handleVolume(i)"></div>
+                    </div>
+                </div>
+                <div class="v-video-controller-list-fullscreen" @click="toggleFullscreen()">
+                    <VIcon :icon="isFullscreen? ExitFullscreenIcon : FullscreenIcon" :size="20"></VIcon>
+                </div>
             </div>
+
         </div>
     </div>
   </div>
@@ -28,14 +42,24 @@
 <script>
 import { ref, computed } from 'vue';
 import { useVideoProgress } from './hooks/useVideoProgress'
+
+// icons
 import VIcon from '../VIcon.vue';
 import PlayIcon from '@/icons/PlayIcon.vue';
 import PauseIcon from '@/icons/PauseIcon.vue';
 import FullscreenIcon from '@/icons/FullscreenIcon.vue';
 import ExitFullscreenIcon from '@/icons/ExitFullscreenIcon.vue';
+import VolumeHighIcon from '@/icons/VolumeHighIcon.vue';
+import VolumeMuteIcon from '@/icons/VolumeMuteIcon.vue';
+import VolumeLowIcon from '@/icons/VolumeLowIcon.vue';
+
+// hooks
 import { useVideoLaunch } from './hooks/useVideoLaunch';
 import { useVideoFullscreen } from './hooks/useVideoFullScreen'
 import { useVideoTool } from './hooks/useVideoTool';
+import { useVideoVolume } from './hooks/useVideoVolume';
+
+
 
 export default {
     name:'VVideoPlayer',
@@ -60,7 +84,6 @@ export default {
         const videoRef = ref();
         const wrapperRef = ref();
         const progressWrapperRef = ref();
-        const dragRef = ref();
 
         let src = computed(()=>{
             const target = props.source[props.quality];
@@ -75,19 +98,41 @@ export default {
         // video launch
         let { isPlaying, start, pause, toggleLaunch } = useVideoLaunch(videoRef);
 
-        // 是否顯示 tool bar
+        // video tool bar
         let { isTouchingTool, videoPlayerMouseMove, videoPlayerMouseLeave, videoPlayerMouseEnter, showTool } = useVideoTool(isPlaying);
 
         // video progress
-        let { duration, currentTime, progress, onLoadedMetadata, onTimeUpdate, startDrag, stopDrag, dragTo } = useVideoProgress(videoRef, progressWrapperRef, dragRef);
+        let { duration, currentTime, progress, onLoadedMetadata, onTimeUpdate, startDrag, stopDrag, dragTo } = useVideoProgress(videoRef, progressWrapperRef, isPlaying);
         
         // video fullscreen
         let { isFullscreen, toggleFullscreen } = useVideoFullscreen(wrapperRef);
 
+        // video volume
+        let { volume, isMuted, setVolume, toggleMute } = useVideoVolume(videoRef)
+
+        const handleVolume = (i) =>{
+            setVolume(i*10);    
+        }
+
+        const formatTime = (seconds) => {
+            if (!seconds || isNaN(seconds)) return '00:00'
+
+            const h = Math.floor(seconds / 3600)
+            const m = Math.floor((seconds % 3600) / 60)
+            const s = Math.floor(seconds % 60)
+
+            if (h > 0) {
+                return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`
+            }
+
+            return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`
+        }
+        
         return {
             src, wrapperRef, videoRef, duration, currentTime, progress, onLoadedMetadata, onTimeUpdate, start, pause,
-            PlayIcon, PauseIcon, isPlaying, isFullscreen, toggleFullscreen, startDrag, stopDrag, dragTo,
-            FullscreenIcon, ExitFullscreenIcon, progressWrapperRef, toggleLaunch, dragRef, showTool, isTouchingTool, videoPlayerMouseMove,videoPlayerMouseLeave, videoPlayerMouseEnter
+            PlayIcon, PauseIcon, isPlaying, isFullscreen, toggleFullscreen, startDrag, stopDrag, dragTo, formatTime,
+            FullscreenIcon, ExitFullscreenIcon, progressWrapperRef, toggleLaunch, showTool, isTouchingTool, videoPlayerMouseMove,videoPlayerMouseLeave, videoPlayerMouseEnter,
+            volume, isMuted, setVolume, toggleMute, VolumeHighIcon, handleVolume, VolumeMuteIcon, VolumeLowIcon
         }
     }
 }
@@ -138,6 +183,9 @@ export default {
         background: transparent;
         backdrop-filter: blur(1.5px);
         transition: bottom 0.3s linear;
+    }
+    .v-video-controllers-wrapper-fullscreen{
+        height: 75px;
     }
     .v-video-controllers-wrapper-show{
         bottom: 0;
@@ -213,6 +261,19 @@ export default {
         box-sizing: border-box;
         display: flex;
         align-items: center;
+        color: white;
+    }
+    .v-video-controller-list-wrapper-fullscreen{
+        height: 55px;
+    }
+    .v-video-controller-left-wrapper{
+        display: flex;
+        align-items: center;
+    }
+    .v-video-controller-right-wrapper{
+        display: flex;
+        align-items: center;
+        margin-left: auto;
     }
     .v-video-controller-list-launch{
         width: 40px;
@@ -224,6 +285,39 @@ export default {
     }
     .v-video-controller-list-launch:hover{
         cursor: pointer;
+    }
+
+    .v-video-controller-timer{
+        color: white;
+        margin-left: 10px;
+    }
+
+    .v-video-controller-volume-wrapper{
+        margin-right: 10px;
+        display: flex;
+        align-items: center;
+    }
+    .v-video-controller-volume-icon:hover{
+        cursor: pointer;
+    }
+    .v-video-controller-volume-lattice-wrapper{
+        display: flex;
+        gap: 4px;
+        margin-left: 10px;
+    }
+    .v-video-controller-volume-lattice{
+        width: 5px;
+        height: 14px;
+        box-sizing: border-box;
+        background: rgba(255,255,255,0.15);
+        flex-shrink: 0;
+        flex-grow: 0;
+    }
+    .v-video-controller-volume-lattice:hover{
+        cursor: pointer;
+    }
+    .v-video-controller-volume-lattice-selected{
+        background: white;
     }
     .v-video-controller-list-fullscreen{
         width: 40px;

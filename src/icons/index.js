@@ -29,6 +29,9 @@ export { default as SendIcon } from './SendIcon.vue'
 export { default as TrashIcon } from './TrashIcon.vue'
 export { default as UploadIcon } from './UploadIcon.vue'
 export { default as UserIcon } from './UserIcon.vue'
+export { default as VolumeHighIcon } from './VolumeHighIcon.vue'
+export { default as VolumeLowIcon } from './VolumeLowIcon.vue'
+export { default as VolumeMuteIcon } from './VolumeMuteIcon.vue'
 
 
 
