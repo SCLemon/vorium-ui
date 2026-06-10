@@ -510,7 +510,7 @@ export default {
         left: 0;
         min-height: 31px;
         box-sizing: border-box;
-        background: rgba(0,0,0,0.6);
+        background: black;
         border: 1px solid rgba(255,255,255,0.3);
     }
     .v-options-list-wrapper::before{
@@ -521,7 +521,7 @@ export default {
         transform: translateX(-50%);
         border-left: 8px solid transparent;
         border-right: 8px solid transparent;
-        border-top: 8px solid transparent;
+        border-top: 8px solid rgba(255,255,255,0.3);
     }
     .v-options-list-wrapper::after{
         content: '';
@@ -531,12 +531,6 @@ export default {
         transform: translateX(-50%);
         border-left: 7px solid transparent;
         border-right: 7px solid transparent;
-        border-top: 7px solid rgba(0,0,0,0.6);
-    }
-    .v-options-list-wrapper-fullscreen::before{
-        border-top: 8px solid rgba(255,255,255,0.3);
-    }
-    .v-options-list-wrapper-fullscreen::after{
         border-top: 7px solid black;
     }
     .v-options-list-options{
@@ -549,7 +543,7 @@ export default {
     }
     .v-options-list-options:hover{
         cursor: pointer;
-        background: rgba(255,255,255,0.3);
+        background: rgba(255,255,255,0.1);
     }
 
     /* fullscreen */
