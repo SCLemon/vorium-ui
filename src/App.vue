@@ -1,6 +1,7 @@
 <template>
   <div class="demo-box-wrapper">
-    <VVideoPlayer :source="source"></VVideoPlayer>
+    <VVideoPlayer :source="source">
+    </VVideoPlayer>
   </div>
 </template>
 
@@ -15,9 +16,15 @@ export default {
      VVideoPlayer
   },
   setup(){
-    let source = reactive({
-      '720p': 'assets/video.mp4'
-    })
+    let source = reactive(
+      [
+        {
+          quality: '720p', // could be any string
+          name: 'video.mp4',
+          src: 'assets/video.mp4'
+        }
+      ]
+    )
     return {
       source
     }
