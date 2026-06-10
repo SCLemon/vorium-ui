@@ -18,6 +18,11 @@ export function useVideoProgress(videoRef, progressWrapperRef,isPlaying){
         }
     }
 
+    // 跳到特定時間
+    const setCurrentTime = (seconds) =>{
+        videoRef.value.currentTime = seconds;
+    }
+
     // 快轉
     const forward = (seconds = 10) => {
         if (!videoRef.value) return
@@ -67,6 +72,6 @@ export function useVideoProgress(videoRef, progressWrapperRef,isPlaying){
 
 
     return {
-        duration, currentTime, progress, onLoadedMetadata, onTimeUpdate, forward, backward, seekTo, startDrag, stopDrag, dragTo
+        duration, currentTime, progress, onLoadedMetadata, onTimeUpdate, setCurrentTime, forward, backward, seekTo, startDrag, stopDrag, dragTo
     }
 }

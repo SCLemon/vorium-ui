@@ -31,7 +31,6 @@
             </div>
 
             <div class="v-video-controller-right-wrapper">
-                <slot name="controller"></slot>
                 <div class="v-video-controller-volume-wrapper">
                     <VIcon class="v-video-controller-volume-icon" :icon="isMuted ? VolumeMuteIcon : (volume >= 50 ? VolumeHighIcon : VolumeLowIcon)" :size="20" @click="toggleMute()"></VIcon>
                     <div class="v-video-controller-volume-lattice-wrapper">
@@ -39,13 +38,24 @@
                     </div>
                 </div>
                 <div class="v-video-controller-video-speed-wrapper">
-                    <div class="v-video-controller-video-speed-value">1.0x</div>
-                    <VIcon class="v-video-controller-video-speed-icon" :icon="ChevronDownIcon"></VIcon>
+                    <div class="v-video-controller-video-speed-value-wrapper" @click="toggleSpeedList()">
+                        <div class="v-video-controller-video-speed-value">{{speed.toFixed(2)}}x</div>
+                        <VIcon class="v-video-controller-video-speed-icon" :class="{'v-video-controller-video-speed-icon-rotate': showSpeedList}" :icon="ChevronDownIcon"></VIcon>
+                    </div>
+                    <div class="v-options-list-wrapper" :class="{'v-options-list-wrapper-fullscreen': isFullscreen}" v-if="showSpeedList">
+                        <div class="v-options-list-options" v-for="(item,id) in speedList" :key="id" @click="handleSpeed(item.value)">{{ item.label }}</div>
+                    </div>
                 </div>
                 <div class="v-video-controller-video-quality-wrapper">
-                    <div class="v-video-controller-video-quality-value">1080P</div>
-                    <VIcon class="v-video-controller-video-quality-icon" :icon="ChevronDownIcon"></VIcon>
+                    <div class="v-video-controller-video-quality-value-wrapper" @click="toggleQualityList()">
+                        <div class="v-video-controller-video-quality-value">{{ currentQuality }}</div>
+                        <VIcon class="v-video-controller-video-quality-icon" :class="{'v-video-controller-video-quality-icon-rotate': showQualityList}" :icon="ChevronDownIcon"></VIcon>
+                    </div>
+                    <div class="v-options-list-wrapper" :class="{'v-options-list-wrapper-fullscreen': isFullscreen}" v-if="showQualityList">
+                        <div class="v-options-list-options" v-for="(item,id) in source" :key="id" @click="handleQuality(item.quality)">{{ item.quality }}</div>
+                    </div>
                 </div>
+                <slot name="controller"></slot>
                 <div class="v-video-controller-list-fullscreen" @click="toggleFullscreen()">
                     <VIcon :icon="isFullscreen? ExitFullscreenIcon : FullscreenIcon" :size="18"></VIcon>
                 </div>
@@ -58,7 +68,7 @@
 
 <script>
 
-import { ref, computed } from 'vue';
+import { ref, onMounted, nextTick } from 'vue';
 import { useVideoProgress } from './hooks/useVideoProgress'
 
 // icons
@@ -90,10 +100,6 @@ export default {
             type: Object,
             default: {}
         },
-        currentQuality:{
-            type: String,
-            default: '720p'
-        },
         aspectRatio:{
             type: Number,
             default: 16/9
@@ -106,30 +112,23 @@ export default {
         const videoRef = ref();
         const wrapperRef = ref();
         const progressWrapperRef = ref();
+        const currentQuality = ref('');
+        const videoName = ref('');
+        const src = ref('');
 
-        let videoName = computed(()=>{
-            const target = props.source.find((i)=> i.quality == props.currentQuality);
-            if(target) return target.name;      
-            return '';
-        })
-        let src = computed(()=>{
-            const target = props.source.find((i)=> i.quality == props.currentQuality);
+        onMounted(()=>{
+            let target = props.source[0];
             if(target){
-                if(typeof target.src == 'string') return target.src
-                else if(target.src instanceof File) return URL.createObjectURL(target.src)
+                videoName.value = target.name;
+                currentQuality.value = target.quality;
+                src.value = (typeof target.src == 'string')? target.src : URL.createObjectURL(target.src)
             }
-            return '';
         })
 
+        // General
         function hasSlot(name){
             return !!context.slots[name];
         }
-        
-        // General
-        function handleVolume(i){
-            setVolume(i*10);    
-        }
-
         function formatTime(seconds){
             if (!seconds || isNaN(seconds)) return '00:00'
 
@@ -143,7 +142,68 @@ export default {
 
             return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`
         }
-        
+
+        // speed & quality
+        const speedList = [
+            { label:'1.0x',value:1.00 },
+            { label:'1.25x',value:1.25 },
+            { label:'1.5x',value:1.50 },
+            { label:'1.75x',value:1.75 },
+            { label:'2.0x',value:2.00 },
+        ].reverse();
+
+        const showSpeedList = ref(false);
+        const showQualityList = ref(false);
+
+        function toggleSpeedList(){
+            showSpeedList.value = !showSpeedList.value
+        }
+        function toggleQualityList(){
+            showQualityList.value = !showQualityList.value
+        }
+
+        function handleSpeed(speed){
+            setSpeed(speed)
+            showSpeedList.value = false;
+        }
+
+        function handleQuality(quality){
+
+            if(quality == currentQuality.value){
+                showQualityList.value = false;
+                return;
+            }
+
+            currentQuality.value = quality;
+
+            const target = props.source.find(i=> i.quality == quality);
+            
+            if(target){
+                videoName.value = target.name;
+                currentQuality.value = target.quality;
+                src.value = (typeof target.src == 'string')? target.src : URL.createObjectURL(target.src);
+                
+                // 讓影片維持原狀態
+                const currentTimeStamp = currentTime.value;
+                const currentLaunchStatus = isPlaying.value;
+
+                nextTick(()=>{
+                    if(currentLaunchStatus) start();
+                    setCurrentTime(currentTimeStamp)
+                })
+            }
+            // 加載錯誤則 reset
+            else reset();
+
+            showQualityList.value = false;
+        }
+
+
+        // volume
+        function handleVolume(i){
+            setVolume(i*10);    
+        }
+
 
         // video launch
         let { isPlaying, start, pause, toggleLaunch } = useVideoLaunch(videoRef);
@@ -152,7 +212,7 @@ export default {
         let { isTouchingTool, videoPlayerMouseMove, videoPlayerMouseLeave, videoPlayerMouseEnter, showTool } = useVideoTool(isPlaying);
 
         // video progress
-        let { duration, currentTime, progress, onLoadedMetadata, onTimeUpdate, startDrag, stopDrag, dragTo } = useVideoProgress(videoRef, progressWrapperRef, isPlaying);
+        let { duration, currentTime, progress, setCurrentTime, onLoadedMetadata, onTimeUpdate, startDrag, stopDrag, dragTo } = useVideoProgress(videoRef, progressWrapperRef, isPlaying);
         
         // video fullscreen
         let { isFullscreen, toggleFullscreen } = useVideoFullscreen(wrapperRef);
@@ -164,11 +224,19 @@ export default {
         let { speed, setSpeed } = useVideoSpeed(videoRef)
 
         
+        // reset expect Volume
+        function reset(){
+            setSpeed(1.0);
+            setCurrentTime(0);
+            isPlaying.value = false;
+            pause();
+        }
+
         return {
-            src, wrapperRef, videoRef, duration, currentTime, progress, onLoadedMetadata, onTimeUpdate, start, pause, LogoImg,
-            PlayIcon, PauseIcon, isPlaying, isFullscreen, toggleFullscreen, startDrag, stopDrag, dragTo, formatTime, hasSlot, videoName,
+            src, wrapperRef, videoRef, duration, currentTime, progress, onLoadedMetadata, onTimeUpdate, start, pause, LogoImg, speedList, handleSpeed, toggleSpeedList, toggleQualityList,
+            PlayIcon, PauseIcon, isPlaying, isFullscreen, toggleFullscreen, startDrag, stopDrag, dragTo, formatTime, hasSlot, videoName, showSpeedList, showQualityList, handleQuality,
             FullscreenIcon, ExitFullscreenIcon, progressWrapperRef, toggleLaunch, showTool, isTouchingTool, videoPlayerMouseMove,videoPlayerMouseLeave, videoPlayerMouseEnter,
-            volume, isMuted, setVolume, toggleMute, VolumeHighIcon, handleVolume, VolumeMuteIcon, VolumeLowIcon, speed, setSpeed, ChevronDownIcon
+            volume, isMuted, setVolume, toggleMute, VolumeHighIcon, handleVolume, VolumeMuteIcon, VolumeLowIcon, speed, setSpeed, ChevronDownIcon, currentQuality
         }
     }
 }
@@ -182,10 +250,11 @@ export default {
         overflow: hidden;
         display: flex;
         align-items: center;
+        user-select: none;
     }
     .v-video-player{
         width: 100%; 
-        border: 0.01px solid rgba(0,0,0,1);
+        border: 0.01px solid rgba(0,0,0,0.1);
     }
     .v-video-player:hover{
         cursor: pointer;
@@ -209,11 +278,13 @@ export default {
         color: white;
         display: flex;
         align-items: center;
-        padding-left: 25px;
-        padding-right: 25px;
+        padding-left: 20px;
+        padding-right: 15px;
     }
     .v-video-header-wrapper-fullscreen{
         height: 100px;
+        padding-left: 25px;
+        padding-right: 25px;
     }
     .v-video-header-wrapper-show{
         top:0;
@@ -232,14 +303,14 @@ export default {
     .v-video-header-name{
         font-size: 20px;
         color: rgba(200, 200, 200);
-        /* font-weight: bolder; */
     }
 
 
     /* Progress */
     .v-video-controller-progress-wrapper{
         position: relative;
-        width: 100%;
+        width: calc(100% - 16px);
+        margin: 0 auto;
         height: 13px;
     }
 
@@ -260,7 +331,6 @@ export default {
         left: 0;
         bottom: 0;
         transition:
-            width .05s linear,
             height .15s ease;
     }
 
@@ -390,22 +460,30 @@ export default {
     .v-video-controller-volume-lattice-selected{
         background: white;
     }
+    
     /* video speed & quality */
     .v-video-controller-video-speed-wrapper,
     .v-video-controller-video-quality-wrapper
     {
-        display: flex;
-        align-items: center;
         border-right: 0.5px solid rgba(255,255,255,0.2);
         padding-left: 12px;
         padding-right: 12px;
         font-size: 14px;
         height: 65%;
+        position: relative;
     }
     .v-video-controller-video-speed-wrapper:hover,
     .v-video-controller-video-quality-wrapper:hover
     {
         cursor: pointer;
+    }
+
+    .v-video-controller-video-speed-value-wrapper,
+    .v-video-controller-video-quality-value-wrapper
+    {
+        display: flex;
+        height: 100%;
+        align-items: center;
     }
     .v-video-controller-video-speed-value,
     .v-video-controller-video-quality-value
@@ -416,6 +494,62 @@ export default {
     .v-video-controller-video-quality-icon
     {
         color: rgba(170,170,170);
+        transition: rotate 0.1s ease;
+    }
+    .v-video-controller-video-speed-icon-rotate,
+    .v-video-controller-video-quality-icon-rotate
+    {
+        rotate: 180deg;
+    }
+
+    /* options list */
+    .v-options-list-wrapper{
+        position: absolute;
+        width: 100%;
+        bottom: 120%;
+        left: 0;
+        min-height: 31px;
+        box-sizing: border-box;
+        background: rgba(0,0,0,0.6);
+        border: 1px solid rgba(255,255,255,0.3);
+    }
+    .v-options-list-wrapper::before{
+        content: '';
+        position: absolute;
+        left: 50%;
+        bottom: -8px;
+        transform: translateX(-50%);
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        border-top: 8px solid transparent;
+    }
+    .v-options-list-wrapper::after{
+        content: '';
+        position: absolute;
+        left: 50%;
+        bottom: -6.8px;
+        transform: translateX(-50%);
+        border-left: 7px solid transparent;
+        border-right: 7px solid transparent;
+        border-top: 7px solid rgba(0,0,0,0.6);
+    }
+    .v-options-list-wrapper-fullscreen::before{
+        border-top: 8px solid rgba(255,255,255,0.3);
+    }
+    .v-options-list-wrapper-fullscreen::after{
+        border-top: 7px solid black;
+    }
+    .v-options-list-options{
+        width: 100%;
+        height: 31px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-sizing: border-box;
+    }
+    .v-options-list-options:hover{
+        cursor: pointer;
+        background: rgba(255,255,255,0.3);
     }
 
     /* fullscreen */
