@@ -90,7 +90,7 @@ import { useVideoVolume } from './hooks/useVideoVolume';
 import { useVideoSpeed } from './hooks/useVideoSpeed';
 
 // assets
-import LogoImg from '../../../public/assets/full_logo_trans.png'
+import LogoImg from './assets/full_logo_trans.png'
 
 // slot -> logo, controller
 export default {

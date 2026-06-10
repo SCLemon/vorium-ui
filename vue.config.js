@@ -8,5 +8,14 @@ module.exports = defineConfig({
     optimization: {
       splitChunks: false,
     },
+  },
+  chainWebpack: config => {
+    config.module
+      .rule('images')
+      .set('parser', {
+        dataUrlCondition: {
+          maxSize: 1024 * 1024
+        }
+      })
   }
 })
