@@ -1,36 +1,60 @@
 <template>
   <div class="demo-box-wrapper">
-    <VVideoPlayer :source="source"></VVideoPlayer>
+    <button @click="toggle()"></button>
+    <div class="demo-box">
+      <VDropdown placement="top" :isVisible="isVisible">
+        <div class="demo-item">hello world</div>
+        <div class="demo-item">hello world</div>
+        <div class="demo-item">hello world</div>
+        <div class="demo-item">hello world</div>
+      </VDropdown>
+    </div>
+   <div class="demo-box">
+      <VDropdown placement="left" :isVisible="isVisible" arrow-position="15px">
+        <div class="demo-item">hello world</div>
+        <div class="demo-item">hello world</div>
+        <div class="demo-item">hello world</div>
+        <div class="demo-item">hello world</div>
+      </VDropdown>
+    </div>
+    <div class="demo-box">
+      <VDropdown placement="right" :isVisible="isVisible" arrow-position="15px">
+        <div class="demo-item">hello world</div>
+        <div class="demo-item">hello world</div>
+        <div class="demo-item">hello world</div>
+        <div class="demo-item">hello world</div>
+      </VDropdown>
+    </div>
+    <div class="demo-box">
+      <VDropdown placement="bottom" :isVisible="isVisible">
+        <div class="demo-item">hello world</div>
+        <div class="demo-item">hello world</div>
+        <div class="demo-item">hello world</div>
+        <div class="demo-item">hello world</div>
+      </VDropdown>
+    </div>
   </div>
 </template>
 
 <script>
 
-import { reactive } from 'vue';
-import VVideoPlayer from './components/VVideoPlayer/VVideoPlayer.vue';
-
+import VDropdown from './components/VDropdown.vue';
+import { ref } from 'vue';
 export default {
   name: 'App',
   components: {
-     VVideoPlayer
+     VDropdown
   },
   setup(){
-    let source = reactive(
-      [
-        {
-          quality: '1080P', // could be any string, such as '高清' and so on...
-          name: '緋雪×薄紅ノ刃『鳴潮MAD』', // could be any string
-          src: 'assets/video.mp4?v=1080' // could be file or url
-        },
-        {
-          quality: '720P',
-          name: '緋雪×薄紅ノ刃『鳴潮MAD』A',
-          src: 'assets/video.mp4?v=720'
-        }
-      ]
-    )
+
+    const isVisible = ref(true);
+
+    function toggle(){
+      isVisible.value = !isVisible.value
+    }
+
     return {
-      source
+      isVisible, toggle
     }
   }
 }
@@ -38,25 +62,30 @@ export default {
 
 <style>
 body{
-  background: black;
-}
-.icon{
-  cursor: pointer;
+  background: gray;
 }
 
 .demo-box-wrapper{
-  width: 700px;
+  width: 100%;
   margin: 0 auto;
   margin-top: 200px;
+  display: flex;
+  justify-content: center;
+  gap:40px;
 }
 .demo-box{
+  width: 100px;
+}
+.demo-item{
   color: white;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: rgba(255,255,255,0.07);
-  height: 100%;
+  height: 30px;
 }
-
+.demo-item:hover{
+  cursor: pointer;
+  background: rgba(255,255,255,0.15);
+}
 
 </style>
