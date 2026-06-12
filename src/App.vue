@@ -9,7 +9,7 @@
         <div class="demo-item">hello world</div>
       </VDropdown>
     </div>
-   <div class="demo-box">
+    <div class="demo-box">
       <VDropdown placement="left" :isVisible="isVisible" arrow-position="15px">
         <div class="demo-item">hello world</div>
         <div class="demo-item">hello world</div>

@@ -33,6 +33,10 @@ export default {
             type: String,
             default: '30px'
         },
+        maxHeight:{
+            type: String,
+            default: '30px'
+        },
         background:{
             type: String,
             default: 'black'
@@ -47,7 +51,7 @@ export default {
         },
         arrowBorderColor: {
             type: String,
-            default: 'rgba(0,0,0,0.4)'
+            default: 'rgba(255,255,255,0.2)'
         },
         isVisible:{
             type: Boolean,
