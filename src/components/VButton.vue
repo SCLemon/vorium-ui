@@ -26,8 +26,8 @@
 
 <script>
 
-import VIcon from '@/components/VIcon.vue';
-import { LoadingIcon } from '@/icons/index.js';
+import VIcon from '../components/VIcon.vue';
+import { LoadingIcon } from '../icons/index.js';
 import { computed } from 'vue';
 
 export default {

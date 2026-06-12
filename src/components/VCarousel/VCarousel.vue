@@ -22,8 +22,8 @@
 <script>
 import { computed, onUnmounted, ref, useSlots, watch } from 'vue';
 import VIcon from '../VIcon.vue';
-import ChevronLeftIcon from '@/icons/ChevronLeftIcon.vue';
-import ChevronRightIcon from '@/icons/ChevronRightIcon.vue';
+import ChevronLeftIcon from '../../icons/ChevronLeftIcon.vue';
+import ChevronRightIcon from '../../icons/ChevronRightIcon.vue';
 import VButton from '../VButton.vue';
 
 export default {

@@ -34,7 +34,7 @@
 <script>
 import { onMounted, onUnmounted,computed, useModel, ref } from 'vue';
 import VIcon from './VIcon.vue';
-import { SearchIcon, CloseIcon, EyeIcon, EyeOffIcon, LoadingIcon } from '@/icons/index.js';
+import { SearchIcon, CloseIcon, EyeIcon, EyeOffIcon, LoadingIcon } from '../icons/index.js';
 export default {
     name:'VInput',
     emits: [

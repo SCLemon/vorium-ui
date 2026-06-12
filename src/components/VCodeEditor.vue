@@ -23,10 +23,10 @@
 import { onMounted, onUnmounted, watch, ref, computed } from 'vue'
 
 import VIcon from './VIcon.vue'
-import CopyIcon from '@/icons/CopyIcon.vue'
-import CheckIcon from '@/icons/CheckIcon.vue'
-import CloseIcon from '@/icons/CloseIcon.vue'
-import CodeIcon from '@/icons/CodeIcon.vue'
+import CopyIcon from '../icons/CopyIcon.vue'
+import CheckIcon from '../icons/CheckIcon.vue'
+import CloseIcon from '../icons/CloseIcon.vue'
+import CodeIcon from '../icons/CodeIcon.vue'
 
 const sizeConfig = {
     'xs':{

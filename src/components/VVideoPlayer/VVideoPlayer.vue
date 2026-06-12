@@ -73,14 +73,14 @@ import { useVideoProgress } from './hooks/useVideoProgress'
 
 // icons
 import VIcon from '../VIcon.vue';
-import PlayIcon from '@/icons/PlayIcon.vue';
-import PauseIcon from '@/icons/PauseIcon.vue';
-import FullscreenIcon from '@/icons/FullscreenIcon.vue';
-import ExitFullscreenIcon from '@/icons/ExitFullscreenIcon.vue';
-import VolumeHighIcon from '@/icons/VolumeHighIcon.vue';
-import VolumeMuteIcon from '@/icons/VolumeMuteIcon.vue';
-import VolumeLowIcon from '@/icons/VolumeLowIcon.vue';
-import ChevronDownIcon from '@/icons/ChevronDownIcon.vue';
+import PlayIcon from '../../icons/PlayIcon.vue';
+import PauseIcon from '../../icons/PauseIcon.vue';
+import FullscreenIcon from '../../icons/FullscreenIcon.vue';
+import ExitFullscreenIcon from '../../icons/ExitFullscreenIcon.vue';
+import VolumeHighIcon from '../../icons/VolumeHighIcon.vue';
+import VolumeMuteIcon from '../../icons/VolumeMuteIcon.vue';
+import VolumeLowIcon from '../../icons/VolumeLowIcon.vue';
+import ChevronDownIcon from '../../icons/ChevronDownIcon.vue';
 
 // hooks
 import { useVideoLaunch } from './hooks/useVideoLaunch';
