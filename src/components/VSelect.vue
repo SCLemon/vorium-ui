@@ -6,7 +6,7 @@
         <VDropdown class="v-select-dropdown" :hasBorder="hasBorder" :placement="direction" :style="{ fontSize }" 
         :isVisible="isOpen" :min-height="height" :arrowPosition="arrowPosition" :arrow-size="arrowSize" :dropDownBorderColor="borderColor" :background="dropDownBackground" :arrow-border-color="borderColor">
             <div class="v-select-dropdown-item-wrapper" :style="{ maxHeight: `calc(${height} * ${maxVisibleItems})`}" v-if="list.length">
-                <div class="v-select-dropdown-item" :class="{ 'v-select-dropdown-item-selected': !item.disabled && modelValue?.value === item.value, 'v-select-dropdown-item-disabled': item.disabled}" :style="{ height, fontSize, lineHeight:height }" v-for="(item, id) in list" :key="id" @click.stop="!item.disabled && setValue(item)">{{ item.label }}</div>
+                <div class="v-select-dropdown-item" :class="{ 'v-select-dropdown-item-selected': !item.disabled && modelValue?.value === item.value, 'v-select-dropdown-item-disabled': item.disabled}" :style="{ height, fontSize, lineHeight:height, textAlign }" v-for="(item, id) in list" :key="id" @click.stop="!item.disabled && setValue(item)">{{ item.label }}</div>
             </div>
             <div v-else>
                 <div class="v-select-dropdown-item-empty" :style="{ height, fontSize, lineHeight:height }">{{ emptyText }}</div>
@@ -48,6 +48,10 @@ export default {
         fontSize:{
             type: String,
             default: '12px'
+        },
+        textAlign:{
+            type: String,
+            default: 'left'
         },
         placeholder:{
             type: String,

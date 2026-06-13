@@ -47,11 +47,11 @@ export default {
         },
         dropDownBorderColor: {
             type: String,
-            default: 'rgba(255,255,255,0.12)'
+            default: 'rgba(255,255,255,0.3)'
         },
         arrowBorderColor: {
             type: String,
-            default: 'rgba(255,255,255,0.12)'
+            default: 'rgba(255,255,255,0.3)'
         },
         isVisible:{
             type: Boolean,
@@ -112,7 +112,7 @@ export default {
         content: '';
         position: absolute;
         left: var(--arrow-position);
-        bottom: calc(var(--arrow-inner-size) * -1 + 0.5px);
+        bottom: calc(var(--arrow-inner-size) * -1 + 1px);
         transform: translateX(-50%);
         border-left: var(--arrow-inner-size) solid transparent;
         border-right: var(--arrow-inner-size) solid transparent;
@@ -139,7 +139,7 @@ export default {
         content: '';
         position: absolute;
         top: var(--arrow-position);
-        left: calc(var(--arrow-inner-size) * -1 + 0.5px);
+        left: calc(var(--arrow-inner-size) * -1 + 1px);
         transform: translateY(-50%);
         border-top: var(--arrow-inner-size) solid transparent;
         border-bottom: var(--arrow-inner-size) solid transparent;
@@ -166,7 +166,7 @@ export default {
         content: '';
         position: absolute;
         left: var(--arrow-position);
-        top: calc(var(--arrow-inner-size) * -1 + 0.5px);
+        top: calc(var(--arrow-inner-size) * -1 + 1px);
         transform: translateX(-50%);
         border-left: var(--arrow-inner-size) solid transparent;
         border-right: var(--arrow-inner-size) solid transparent;
@@ -193,7 +193,7 @@ export default {
         content: '';
         position: absolute;
         top: var(--arrow-position);
-        right: calc(var(--arrow-inner-size) * -1 + 0.5px);
+        right: calc(var(--arrow-inner-size) * -1 + 1px);
         transform: translateY(-50%);
         border-top: var(--arrow-inner-size) solid transparent;
         border-bottom: var(--arrow-inner-size) solid transparent;
