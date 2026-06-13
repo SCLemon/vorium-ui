@@ -1,60 +1,41 @@
 <template>
   <div class="demo-box-wrapper">
-    <button @click="toggle()"></button>
     <div class="demo-box">
-      <VDropdown placement="top" :isVisible="isVisible">
-        <div class="demo-item">hello world</div>
-        <div class="demo-item">hello world</div>
-        <div class="demo-item">hello world</div>
-        <div class="demo-item">hello world</div>
-      </VDropdown>
+      <VSelect v-model="selected" :list="list"></VSelect>
     </div>
     <div class="demo-box">
-      <VDropdown placement="left" :isVisible="isVisible" arrow-position="15px">
-        <div class="demo-item">hello world</div>
-        <div class="demo-item">hello world</div>
-        <div class="demo-item">hello world</div>
-        <div class="demo-item">hello world</div>
-      </VDropdown>
-    </div>
-    <div class="demo-box">
-      <VDropdown placement="right" :isVisible="isVisible" arrow-position="15px">
-        <div class="demo-item">hello world</div>
-        <div class="demo-item">hello world</div>
-        <div class="demo-item">hello world</div>
-        <div class="demo-item">hello world</div>
-      </VDropdown>
-    </div>
-    <div class="demo-box">
-      <VDropdown placement="bottom" :isVisible="isVisible">
-        <div class="demo-item">hello world</div>
-        <div class="demo-item">hello world</div>
-        <div class="demo-item">hello world</div>
-        <div class="demo-item">hello world</div>
-      </VDropdown>
+      <VSelect></VSelect>
     </div>
   </div>
 </template>
 
 <script>
 
-import VDropdown from './components/VDropdown.vue';
-import { ref } from 'vue';
+import { ref, reactive } from 'vue';
+import VSelect from './components/VSelect.vue';
 export default {
   name: 'App',
   components: {
-     VDropdown
+     VSelect
   },
   setup(){
+    let selected = ref(null);
 
-    const isVisible = ref(true);
-
-    function toggle(){
-      isVisible.value = !isVisible.value
-    }
+    const list = reactive([
+        { label: '蘿蔔糕', value: '菜頭糕', disabled: true },
+        { label: '煎餅', value: '煎餅', disabled: true },
+        { label: '蛋餅', value: '蛋餅', disabled: true },
+        { label: '蔥抓餅', value: '蔥抓餅', disabled: false },
+        { label: '超級無敵豪華雙層起司培根牛肉漢堡套餐加大薯條與可樂', value: 'burger', disabled: true },
+        { label: '鐵板麵', value: '鐵板麵', disabled: true },
+        { label: '三明治', value: '三明治' , disabled: true},
+        { label: '蘿蔔糕加蛋', value: '蘿蔔糕加蛋', disabled: false },
+        { label: '飯糰', value: '飯糰', disabled: true },
+        { label: '燒餅油條搭配特大杯冰豆漿早餐組合', value: 'breakfast', disabled: true }
+    ]);
 
     return {
-      isVisible, toggle
+      list, selected
     }
   }
 }
@@ -62,7 +43,7 @@ export default {
 
 <style>
 body{
-  background: gray;
+  background: black;
 }
 
 .demo-box-wrapper{
@@ -74,18 +55,7 @@ body{
   gap:40px;
 }
 .demo-box{
-  width: 100px;
-}
-.demo-item{
-  color: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 30px;
-}
-.demo-item:hover{
-  cursor: pointer;
-  background: rgba(255,255,255,0.15);
+  width: 200px;
 }
 
 </style>

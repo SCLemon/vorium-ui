@@ -23,7 +23,7 @@ export default {
     props:{
         placement:{
             type: String,
-            default: 'top'
+            default: 'bottom'
         },
         width: {
             type: String,
@@ -47,11 +47,11 @@ export default {
         },
         dropDownBorderColor: {
             type: String,
-            default: 'rgba(255,255,255,0.3)'
+            default: 'rgba(255,255,255,0.12)'
         },
         arrowBorderColor: {
             type: String,
-            default: 'rgba(255,255,255,0.2)'
+            default: 'rgba(255,255,255,0.12)'
         },
         isVisible:{
             type: Boolean,
@@ -80,6 +80,8 @@ export default {
         transition: opacity 0.3s ease,
                     visibility 0s linear .3s;
         user-select: none;
+
+        pointer-events: none;
         visibility: hidden;
     }
     .v-dropdown-wrapper-is-visible{
@@ -88,6 +90,7 @@ export default {
         transition:
             opacity .3s ease,
             visibility 0s linear 0s;
+        pointer-events: auto;
     }
     .v-dropdown-wrapper-has-border{
         border: 1px solid var(--dropdown-border-color);
