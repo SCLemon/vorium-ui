@@ -321,7 +321,7 @@ export default {
         background: rgba(255,255,255,.12);
         left: 0;
         bottom: 0;
-        transition: height .15s ease;
+        transition: height .15s ease, transform .15s ease;;;
     }
 
     .v-video-controller-progress{
@@ -330,8 +330,7 @@ export default {
         background: white;
         left: 0;
         bottom: 0;
-        transition:
-            height .15s ease;
+        transition: height .15s ease, transform .15s ease;
     }
 
     .v-video-controller-progress-track,
