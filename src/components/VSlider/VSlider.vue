@@ -11,7 +11,7 @@
             <div class="v-slider-controller-progress-controller" :style="{ left: progress + '%', background: (disabled ? disabledColor: color), height: circleRadius }"
             @mouseenter="isHover = true" @mouseleave="isHover = false">
                 <VDropdown class="v-slider-controller-progress-controller-dropdown" placement="top" minHeight="22.5px" width="40px" v-if="showTips && (isHover || isDragging)">
-                    <div class="v-slider-value">{{ tipText }}</div>
+                    <div class="v-slider-value">{{ tipText || progress.toFixed(1) }}</div>
                 </VDropdown>
             </div>
         </div>
