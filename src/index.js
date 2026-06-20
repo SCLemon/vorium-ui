@@ -13,3 +13,5 @@ export { default as VCarouselItem } from './components/VCarousel/components/VCar
 export { default as VVideoPlayer } from './components/VVideoPlayer/VVideoPlayer.vue'
 export { default as VDropdown } from './components/VDropdown.vue'
 export { default as VSelect } from './components/VSelect.vue'
+export { default as VTextArea } from './components/VTextArea.vue'
+export { default as VSwitch } from './components/VSwitch.vue'
