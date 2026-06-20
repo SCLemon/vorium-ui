@@ -1,7 +1,7 @@
 <template>
   <div class="demo-box-wrapper">
     <div class="demo-box">
-      <VSlider v-model="progress">
+      <VSlider v-model="progress" :tipText="progress.toFixed(1)">
         <template #prepend><div class="demo-prepend"><VIcon :icon="VolumeHighIcon" :size="16"></VIcon></div></template>
         <template #append><div class="demo-append">{{ progress.toFixed(1) }} %</div></template>
       </VSlider>
@@ -21,7 +21,8 @@ export default {
      VSlider, VIcon
   },
   setup(){
-    const progress = ref(50)
+    const progress = ref(50);
+
     return{
       progress, VolumeHighIcon
     }

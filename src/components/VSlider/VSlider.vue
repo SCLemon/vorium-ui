@@ -10,8 +10,8 @@
             
             <div class="v-slider-controller-progress-controller" :style="{ left: progress + '%', background: (disabled ? disabledColor: color), height: circleRadius }"
             @mouseenter="isHover = true" @mouseleave="isHover = false">
-                <VDropdown class="v-slider-controller-progress-controller-dropdown" placement="top" minHeight="22.5px" width="35px" v-if="isHover || isDragging">
-                    <div class="v-slider-value">{{ progress.toFixed(1) }}</div>
+                <VDropdown class="v-slider-controller-progress-controller-dropdown" placement="top" minHeight="22.5px" width="40px" v-if="showTips && (isHover || isDragging)">
+                    <div class="v-slider-value">{{ tipText }}</div>
                 </VDropdown>
             </div>
         </div>
@@ -53,7 +53,15 @@ export default {
         disabled:{
             type: Boolean,
             default: false,
-        }
+        },
+        showTips:{
+            type: Boolean,
+            default: true,
+        },
+        tipText:{
+            type: String,
+            default: ''
+        },
     },
     setup(props, context){
         const progressWrapperRef = ref(null);
@@ -126,7 +134,7 @@ export default {
     .v-slider-controller-progress-controller-dropdown{
         position: absolute;
         bottom: calc(100% + 11.5px);
-        transform: translateX(-11.5px);
+        transform: translateX(-12.75px);
     }
 
     .v-slider-controller-progress-wrapper:hover{
