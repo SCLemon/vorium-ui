@@ -9,12 +9,18 @@ export function useVideoProgress(videoRef, progressWrapperRef,isPlaying){
         return currentTime.value / duration.value * 100
     })
     const onLoadedMetadata = () => {
+
+        if (!videoRef.value) return;
+
         duration.value = videoRef.value.duration
     }
     const onTimeUpdate = () => {
+
+        if (!videoRef.value) return;
+
         currentTime.value = videoRef.value.currentTime
-        if(currentTime.value == duration.value){
-            isPlaying.value = false; // 結束時更新狀態
+        if (videoRef.value.ended) {
+            isPlaying.value = false;
         }
     }
 

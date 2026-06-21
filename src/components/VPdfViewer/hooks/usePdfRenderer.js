@@ -42,9 +42,7 @@ export function usePdfRenderer(pdf, pdfContainer, pageCanvases, pageCache, obser
 
             initObserver();
         } 
-        catch (err) {
-            console.log(err)
-        }
+        catch (err) {}
     }
 
     // 建立頁面輪廓
@@ -103,6 +101,19 @@ export function usePdfRenderer(pdf, pdfContainer, pageCanvases, pageCache, obser
     }
 
     // 初始化監視器
+
+    function isElementVisible(element, container) {
+        
+        if(!element || !container) return true;
+
+        const rect = element.getBoundingClientRect();
+        const containerRect = container.getBoundingClientRect();
+
+        return (
+            rect.bottom > containerRect.top &&
+            rect.top < containerRect.bottom
+        );
+    }
     async function initObserver() {
 
         if (observer) observer.disconnect();
@@ -121,7 +132,10 @@ export function usePdfRenderer(pdf, pdfContainer, pageCanvases, pageCache, obser
                             
                             // 釋放資源
                             pageCanvases.forEach((p) => {
-                                if (Math.abs(p.pageNum - pageNum) > (props.preloadCount + 1)) {
+                                
+                                const visible = isElementVisible(p.canvasWrapper, pdfContainer.value);
+
+                                if (!visible && Math.abs(p.pageNum - pageNum) > (props.preloadCount + 1)) {
                                     releaseCanvasElement(p);
                                 }
                             });
@@ -143,6 +157,7 @@ export function usePdfRenderer(pdf, pdfContainer, pageCanvases, pageCache, obser
             observer.observe(canvasWrapper);
         });
     }
+
 
     // 進行頁面渲染
     async function safeRenderPage(pageNum, canvasWrapper) {

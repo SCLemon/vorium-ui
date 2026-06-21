@@ -30,74 +30,74 @@ export default {
 
     setup(props, context) {
 
-      const pdfContainer = ref(null)
-      const pageCache = new Map()
-      const pageCanvases = []
-      let pdf = null
-      let observer = null
-      let resizeTimer = null
+        const pdfContainer = ref(null)
+        const pageCanvases = []
+            let pageCache = new Map()
+        let pdf = null
+        let observer = null
+        let resizeTimer = null
 
-      function isWebGLAvailable() {
-        try {
-            const canvas = document.createElement('canvas')
+        function isWebGLAvailable() {
+            try {
+                const canvas = document.createElement('canvas')
 
-            return !!(
-                window.WebGLRenderingContext &&
-                (
-                    canvas.getContext('webgl') ||
-                    canvas.getContext('experimental-webgl')
+                return !!(
+                    window.WebGLRenderingContext &&
+                    (
+                        canvas.getContext('webgl') ||
+                        canvas.getContext('experimental-webgl')
+                    )
                 )
-            )
+            }
+            catch {
+                return false
+            }
         }
-        catch {
-            return false
+
+        async function delay(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms))
         }
-      }
 
-      async function delay(ms) {
-          return new Promise(resolve => setTimeout(resolve, ms))
-      }
+        const cleanAll = usePdfCleaner(pdfContainer, pdf, pageCanvases, pageCache);
 
-      const cleanAll = usePdfCleaner(pdfContainer, pdf, pageCanvases, pageCache);
-
-      const { loadPdf, handleResize } = usePdfRenderer(pdf, pdfContainer, pageCanvases, pageCache, observer, resizeTimer, props)
+        const { loadPdf, handleResize } = usePdfRenderer(pdf, pdfContainer, pageCanvases, pageCache, observer, resizeTimer, props)
 
 
 
-      watch(() => props.pdfFile,
-          async () => {
+        watch(() => props.pdfFile,
+            async () => {
 
-              cleanAll()
-              pageCache.value = new Map()
-              await loadPdf()
-          },{
-              immediate: true
-          }
-      )
+                cleanAll()
+                pageCache = new Map()
+                await loadPdf()
+            },{
+                immediate: true
+            }
+        )
 
-      onMounted(() => {
-          pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorker
+        onMounted(() => {
+            pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorker
 
-          pdfjsLib.disableStream = false
-          pdfjsLib.enableWebGL = isWebGLAvailable()
+            pdfjsLib.disableStream = false
+            pdfjsLib.enableWebGL = isWebGLAvailable()
 
-          window.addEventListener('resize', handleResize)
-      })
+            window.addEventListener('resize', handleResize)
+        })
 
-      onUnmounted(() => {
+        onUnmounted(() => {
 
-          window.removeEventListener('resize', handleResize)
+            window.removeEventListener('resize', handleResize)
 
-          if (observer.value) {
-              observer.value.disconnect()
-          }
+            if (observer) {
+                observer.disconnect()
+            }
 
-          cleanAll()
-      })
+            cleanAll()
+        })
 
-      return {
-          pdfContainer, loadPdf, cleanAll, handleResize
-      }
+        return {
+            pdfContainer, loadPdf, cleanAll, handleResize
+        }
     }
 }
 </script>
@@ -106,12 +106,13 @@ export default {
 
 .pdf-wrapper{
     width: 100%;
-    position: relative;
+    height: 100%;
+    overflow: hidden;
 }
 .pdf-container{
     width: 100%;
-    height: 100vh;
-    overflow: auto;
+    height: 100%;
+    overflow-y: auto;
     z-index: 2;
     box-sizing: border-box;
 }

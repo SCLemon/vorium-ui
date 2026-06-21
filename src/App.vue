@@ -44,19 +44,8 @@ body{
   justify-content: center;
 }
 .demo-box{
-  width: 600px;
-}
-.demo-prepend{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.demo-append{
-  font-size: 12px;
-  width: 7ch;
-  display: flex;
-  align-items: center;
-  justify-content: left;
+  width: 400px;
+  height: 570px;
 }
 
 </style>
