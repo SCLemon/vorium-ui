@@ -1,30 +1,32 @@
 <template>
   <div class="demo-box-wrapper">
     <div class="demo-box">
-      <VSlider v-model="progress" :tipText="progress.toFixed(1)">
-        <template #prepend><div class="demo-prepend"><VIcon :icon="VolumeHighIcon" :size="16"></VIcon></div></template>
-        <template #append><div class="demo-append">{{ progress.toFixed(1) }} %</div></template>
-      </VSlider>
+      <VPdfViewer :pdfFile="file" />
     </div>
   </div>
 </template>
 
 <script>
 
-import { ref } from 'vue';
-import VSlider from './components/VSlider/VSlider.vue'
-import VIcon from './components/VIcon.vue';
-import VolumeHighIcon from './icons/VolumeHighIcon.vue'
+import { onMounted, ref } from 'vue';
+import VPdfViewer from './components/VPdfViewer/VPdfViewer.vue';
+
 export default {
   name: 'App',
   components: {
-     VSlider, VIcon
+     VPdfViewer
   },
   setup(){
-    const progress = ref(50);
+    const file = ref(null);
+
+    onMounted(async ()=>{
+      const response = await fetch('/assets/test2.pdf')
+      const blob = await response.blob()
+      file.value = new File([blob], 'test2.pdf',{ type: 'application/pdf' })
+    })
 
     return{
-      progress, VolumeHighIcon
+      file
     }
   }
 }
@@ -38,12 +40,11 @@ body{
 .demo-box-wrapper{
   width: 100%;
   margin: 0 auto;
-  margin-top: 200px;
   display: flex;
   justify-content: center;
 }
 .demo-box{
-  width: 300px;
+  width: 600px;
 }
 .demo-prepend{
   display: flex;
