@@ -1,4 +1,3 @@
-import { markRaw } from 'vue'
 import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf'
 export function usePdfRenderer(pdf, pdfContainer, pageCanvases, pageCache, observer, resizeTimer, props){
     
@@ -88,11 +87,11 @@ export function usePdfRenderer(pdf, pdfContainer, pageCanvases, pageCache, obser
                 container.appendChild(canvasWrapper);
 
                 pageCanvases.push(
-                    markRaw({
+                    {
                         pageNum,
                         canvasWrapper,
                         renderTask: null
-                    })
+                    }
                 );
 
                 page.cleanup();

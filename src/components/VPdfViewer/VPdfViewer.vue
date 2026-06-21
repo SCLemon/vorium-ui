@@ -101,7 +101,7 @@ export default {
     }
 }
 </script>
-<style scoped>
+<style>
 @import 'pdfjs-dist/legacy/web/pdf_viewer.css';
 
 .pdf-wrapper{
