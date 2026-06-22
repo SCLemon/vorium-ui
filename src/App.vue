@@ -1,32 +1,26 @@
 <template>
   <div class="demo-box-wrapper">
     <div class="demo-box">
-      <VPdfViewer :pdfFile="file" />
+      <VInputNumber v-model="number"></VInputNumber>
     </div>
   </div>
 </template>
 
 <script>
 
-import { onMounted, ref } from 'vue';
-import VPdfViewer from './components/VPdfViewer/VPdfViewer.vue';
+import { ref } from 'vue';
+import VInputNumber from './components/VInputNumber.vue';
 
 export default {
   name: 'App',
   components: {
-     VPdfViewer
+     VInputNumber
   },
   setup(){
-    const file = ref(null);
-
-    onMounted(async ()=>{
-      const response = await fetch('/assets/test2.pdf')
-      const blob = await response.blob()
-      file.value = new File([blob], 'test2.pdf',{ type: 'application/pdf' })
-    })
+    const number = ref(2)
 
     return{
-      file
+      number
     }
   }
 }
@@ -44,7 +38,8 @@ body{
   justify-content: center;
 }
 .demo-box{
-  width: 400px;
+  margin-top: 200px;
+  width: 200px;
   height: 570px;
 }
 
