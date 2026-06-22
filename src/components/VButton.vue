@@ -2,7 +2,7 @@
   <button
     class="v-button" 
     :class="[ 
-        `v-button--${type}`,`v-button--${size}`,
+        `v-button--${type}`,
         { 
             [`v-button-is-disabled--${type}`]: disabled || loading, 
             'v-button-is-disabled': disabled || loading,
@@ -12,11 +12,13 @@
             'v-button-is-round': round
         }
     ]" 
+    :style="{ width, height: (circle? '' :height) , fontSize, padding }"
+    
     :disabled="disabled || loading">
 
     <template v-if="loading">
         <VIcon :icon="loadingIcon" :size="iconSize"></VIcon>
-        <div v-if="!circle" class="v-button-loading-text" :class="[`v-button-loading-text--${size}`,{'v-button-loading-text-no-content': loadingText.trim()==''}]">{{ loadingText }}</div>
+        <div v-if="!circle" class="v-button-loading-text" :class="{'v-button-loading-text-no-content': loadingText.trim()==''}">{{ loadingText }}</div>
     </template>
 
     <slot v-else></slot>
@@ -40,9 +42,25 @@ export default {
         type: String,
         default: 'primary',
     },
-    size: {
+    width: {
         type: String,
-        default: 'md',
+        default: '100%'
+    },
+    height:{
+        type: String,
+        default: '38px'
+    },
+    fontSize:{
+        type: String,
+        default: '16px'
+    },
+    iconSize:{
+        type: Number,
+        default: 14,
+    },
+    padding:{
+        type: String,
+        default: '0 20px'
     },
     disabled: {
         type: Boolean,
@@ -73,14 +91,8 @@ export default {
 
   setup(props){
 
-    // loading 圖案大小
-    const sizeMap = {
-        xs: 10, sm: 12, md: 14, lg: 16, xl: 18,
-    }
-    const iconSize = computed(() => sizeMap[props.size] || 16)
-
     return {
-        VIcon, iconSize
+        VIcon
     }
   }
 }
@@ -205,40 +217,6 @@ export default {
 
 
 /* =========================
-   Sizes
-========================= */
-
-.v-button--xs {
-    padding: 0 16px;
-    height: var(--v-button-height-xs);
-    font-size: var(--v-button-font-xs);
-}
-
-.v-button--sm {
-    padding: 0 18px;
-    height:  var(--v-button-height-sm);
-    font-size: var(--v-button-font-sm);
-}
-
-.v-button--md {
-    padding: 0 20px;
-    height: var(--v-button-height-md);
-    font-size: var(--v-button-font-md);
-}
-
-.v-button--lg {
-    padding: 0 22px;
-    height: var(--v-button-height-lg);
-    font-size: var(--v-button-font-lg);
-}
-
-.v-button--xl {
-    padding: 0 24px;
-    height: var(--v-button-height-xl);
-    font-size: var(--v-button-font-xl);
-}
-
-/* =========================
    Round
 ========================= */
 
@@ -251,7 +229,7 @@ export default {
 ========================= */
 
 .v-button-is-circle{
-    padding:0;
+    padding: 0 !important;
     aspect-ratio: 1/1;
     border-radius: var(--v-border-radius-circle);
 }
@@ -319,24 +297,10 @@ export default {
 
 .v-button-loading-text{
     min-width: 4ch;
+    margin-left: 14px;
 }
 .v-button-loading-text-no-content{
     display: none;
-}
-.v-button-loading-text--xs{
-    margin-left: 12px;
-}
-.v-button-loading-text--sm{
-    margin-left: 14px;
-}
-.v-button-loading-text--md{
-    margin-left: 16px;
-}
-.v-button-loading-text--lg{
-    margin-left: 18px;
-}
-.v-button-loading-text--xl{
-    margin-left: 20px;
 }
 
 </style>
