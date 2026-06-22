@@ -1,10 +1,7 @@
 <template>
   <div class="demo-box-wrapper">
     <div class="demo-box">
-      <VButton circle>
-        <VIcon :icon="CheckIcon"></VIcon>
-         <!-- 確認 -->
-      </VButton>
+      <VInputNumber></VInputNumber>
     </div>
   </div>
 </template>
@@ -12,19 +9,17 @@
 <script>
 
 import { ref } from 'vue';
-import VButton from './components/VButton.vue';
-import CheckIcon from './icons/CheckIcon.vue';
-import VIcon from './components/VIcon.vue';
+import VInputNumber from './components/VInputNumber.vue';
+
 
 export default {
   name: 'App',
   components: {
-     VButton, VIcon
+     VInputNumber
   },
   setup(){
 
     return{
-      CheckIcon
     }
   }
 }

@@ -1,13 +1,13 @@
 <template>
-    <div class="v-input-number-wrapper" :style="{ width, height }">
+    <div class="v-input-number-wrapper" :class="{'v-input-number-wrapper-is-focus': isFocus }" :style="{ width, height }">
         <div class="v-input-number-input-wrapper" :class="{ 'v-input-number-input-wrapper-disabled': disabled}">
-            <input v-model="model" class="v-input-number-input" type="number" :style="{ fontSize }" :max="max" :min="min" :disabled="disabled" @wheel.prevent="onWheel">
+            <input v-model="model" class="v-input-number-input" type="number" :style="{ fontSize }" :max="max" :min="min" :disabled="disabled" @wheel.prevent="onWheel" @focus="isFocus = true" @blur="isFocus = false">
         </div>
         <div class="v-input-number-button-wrapper">
-            <div class="v-input-number-button v-input-number-button-top" :class="{ 'v-input-number-button-disabled': disabled || model >= max }" @mousedown="startIncrease" @mouseup="stop" @mouseleave="stop" @touchstart.prevent="startIncrease" @touchend="stop">
+            <div class="v-input-number-button v-input-number-button-top" :class="{ 'v-input-number-button-disabled': disabled || model >= max }" @mousedown="startIncrease" @mouseup="stop" @touchstart.prevent="startIncrease" @touchend="stop">
                 <VIcon :icon="ChevronUpIcon" :size="iconSize"></VIcon>
             </div>
-            <div class="v-input-number-button v-input-number-button-bottom" :class="{ 'v-input-number-button-disabled': disabled || model <= min }" @mousedown="startDecrease" @mouseup="stop" @mouseleave="stop" @touchstart.prevent="startDecrease" @touchend="stop">
+            <div class="v-input-number-button v-input-number-button-bottom" :class="{ 'v-input-number-button-disabled': disabled || model <= min }" @mousedown="startDecrease" @mouseup="stop" @touchstart.prevent="startDecrease" @touchend="stop">
                 <VIcon :icon="ChevronDownIcon" :size="iconSize"></VIcon>
             </div>
         </div>
@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import { useModel, watch, onUnmounted } from 'vue';
+import { ref, useModel, watch, onUnmounted } from 'vue';
 import ChevronUpIcon from '@/icons/ChevronUpIcon.vue';
 import ChevronDownIcon from '@/icons/ChevronDownIcon.vue';
 import VIcon from './VIcon.vue';
@@ -74,6 +74,7 @@ export default {
         // v-model
         const model = useModel(props, 'modelValue', context.emit)
 
+        const isFocus = ref(false);
 
         // decrease & increase
         let holdTimer = null;
@@ -84,6 +85,8 @@ export default {
             stop();
 
             if(props.disabled) return;
+
+            isFocus.value = true;
 
             model.value -= props.step;
 
@@ -101,6 +104,8 @@ export default {
             stop();
 
             if(props.disabled) return;
+
+            isFocus.value = true;
 
             model.value += props.step;
 
@@ -120,6 +125,8 @@ export default {
 
             holdTimer = null;
             repeatTimer = null;
+
+            isFocus.value = false;
         };
 
         // wheel
@@ -159,7 +166,7 @@ export default {
         });
 
         return {
-            model, ChevronUpIcon, ChevronDownIcon, startDecrease, startIncrease, stop, onWheel
+            model, isFocus, ChevronUpIcon, ChevronDownIcon, startDecrease, startIncrease, stop, onWheel
         }
     }
 }
@@ -174,6 +181,9 @@ export default {
         box-sizing: border-box;
         user-select: none;
         min-width: 100px !important;
+    }
+    .v-input-number-wrapper-is-focus{
+        border: var(--v-border-white);
     }
     .v-input-number-wrapper-has-border{
         border: var(--v-border);
@@ -241,7 +251,7 @@ export default {
         background: rgba(255,255,255,0.075);
     }
     .v-input-number-button-top:not(.v-input-number-button-disabled):hover{
-        border-bottom: 1px solid transparent;
+        border-bottom: 0.1px solid transparent;
     }
 
     /* disabled */
