@@ -1,6 +1,6 @@
 <template>
     <div class="v-radio-wrapper" :class="{ 'v-radio-wrapper-is-selected': isSelected, 'v-radio-wrapper-is-disabled': disabled, 'v-radio-wrapper-has-border': hasBorder }" :style="{ width, height, fontSize }" @click="!disabled && (model = value)">
-        <input type="radio" class="v-radio-input" v-model="model" :value="value" :disabled="disabled" v-if="showRadio" @click.stop>
+        <input type="radio" :class="`v-radio-input v-radio-input-${radioTheme}`" :disabled="disabled" v-model="model" :value="value" v-if="showRadio" @click.stop>
         <div class="v-radio-label" :class="{'v-radio-label-is-disabled': disabled}">{{ label }}</div>
     </div>
 </template>
@@ -49,6 +49,10 @@ export default {
         showRadio:{
             type: Boolean,
             default: true
+        },
+        radioTheme:{
+            type: String,
+            default: 'white'
         }
     },
     setup(props, context){
@@ -68,12 +72,12 @@ export default {
 
 <style>
     .v-radio-wrapper{
-        color: var(--v-text-gray);
+        color: gray;
         display: flex;
         justify-content: center;
         align-items: center;
-        padding-left: 7.5px;
-        padding-right: 7.5px;
+        padding-left: 10px;
+        padding-right: 10px;
         position: relative;
         user-select: none;
         transition: color 0.8s ease, border 0.25s ease, background 0.25s ease;
@@ -120,9 +124,10 @@ export default {
     /* disabled */
     .v-radio-wrapper-is-disabled{
         cursor: not-allowed !important;
+        color: rgba(255,255,255,0.15);
     }
     .v-radio-wrapper-is-disabled.v-radio-wrapper-has-border{
-        background: var(--v-surfaces-ghost-disabled);
+        background: rgba(255,255,255,0.1);
     }
 
     .v-radio-label-is-disabled{
@@ -134,12 +139,18 @@ export default {
         margin-left: 0;
         margin-right: 0;
         margin-top: 1px;
+        
+    }
+    .v-radio-input-black{
         accent-color: black;
     }
-    .v-radio-input:disabled{
+    .v-radio-input-white{
+        accent-color: rgba(255,255,255,0.1);
+    }
+    .v-radio-input-is-disabled{
         cursor: not-allowed;
     }
     .v-radio-input + .v-radio-label{
-        margin-left: 7.5px;
+        margin-left: 10px;
     }
 </style>

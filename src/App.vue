@@ -1,8 +1,11 @@
 <template>
   <div class="demo-box-wrapper">
     <div class="demo-box">
-      <VRadio v-model="select" label="水果" value="fruit"/>
-      <VRadio v-model="select" label="蛋糕" value="cake"/>
+      <VRadio v-model="select"  label="水果" value="fruit"/>
+      <VRadio v-model="select"  label="水果" value="frui1t"/>
+      <VRadio v-model="select"  label="水果" value="fruit2"/>
+      <VRadio v-model="select"  :disabled="true" label="蛋糕" value="cake"/>
+      <VRadio v-model="select"  label="水果" value="fruit3"/>
     </div>
   </div>
 </template>
@@ -42,7 +45,6 @@ body{
 }
 .demo-box{
   margin-top: 200px;
-  width: 400px;
   display: flex;
   justify-content: space-evenly;
   align-items: center;
