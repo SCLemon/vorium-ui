@@ -1,7 +1,8 @@
 <template>
   <div class="demo-box-wrapper">
     <div class="demo-box">
-      <VInputNumber></VInputNumber>
+      <VRadio v-model="select" label="水果" value="fruit"/>
+      <VRadio v-model="select" label="蛋糕" value="cake"/>
     </div>
   </div>
 </template>
@@ -9,17 +10,20 @@
 <script>
 
 import { ref } from 'vue';
-import VInputNumber from './components/VInputNumber.vue';
+import VRadio from './components/VRadio.vue';
 
 
 export default {
   name: 'App',
   components: {
-     VInputNumber
+     VRadio
   },
   setup(){
 
+    const select = ref('cake');
+
     return{
+      select
     }
   }
 }
@@ -38,7 +42,11 @@ body{
 }
 .demo-box{
   margin-top: 200px;
-  height: 570px;
+  width: 400px;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  gap: 40px;
 }
 
 </style>

@@ -73,7 +73,7 @@
 
   /* :before hover */
   --v-surfaces-hover:rgba(255,255,255,0.1);
-  --v-opacity-hover: 1;
+  --v-opacity-hover: 0.6;
   --v-opacity-active: 0;
 
 }
