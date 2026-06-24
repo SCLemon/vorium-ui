@@ -28,7 +28,7 @@ export default {
 
         width:{
             type: String,
-            default: '100%'
+            default: 'fit-content'
         },
         height:{
             type: String,

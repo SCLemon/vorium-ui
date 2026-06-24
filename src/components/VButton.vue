@@ -115,6 +115,7 @@ export default {
     border-radius: var(--v-border-radius);
     overflow: hidden;
     font-variant-numeric: tabular-nums;
+    white-space: nowrap;
 }
 
 .v-button:not(:disabled):hover{

@@ -1,32 +1,42 @@
 <template>
   <div class="demo-box-wrapper">
     <div class="demo-box">
-      <VRadio v-model="select"  label="水果" value="fruit"/>
-      <VRadio v-model="select"  label="水果" value="frui1t"/>
-      <VRadio v-model="select"  label="水果" value="fruit2"/>
-      <VRadio v-model="select"  :disabled="true" label="蛋糕" value="cake"/>
-      <VRadio v-model="select"  label="水果" value="fruit3"/>
+      <VCheckBoxGroup ref="group" v-model="fruits">
+          <VCheckBoxOption label="Apple" value="apple" :disabled="true" :hasBorder="true"/>
+          <VCheckBoxOption label="Banana" value="banana" :hasBorder="true"/>
+          <VCheckBoxOption label="Orange" value="orange" :hasBorder="true"/>
+      </VCheckBoxGroup>
+        <button @click="a">1</button>
+        <button @click="b">2</button>
     </div>
   </div>
 </template>
 
 <script>
 
-import { ref } from 'vue';
-import VRadio from './components/VRadio.vue';
-
+import { onMounted, ref, watch } from 'vue';
+import VCheckBoxGroup from './components/VCheckBox/VCheckBoxGroup.vue';
+import VCheckBoxOption from './components/VCheckBox/VCheckBoxOption.vue';
 
 export default {
   name: 'App',
   components: {
-     VRadio
+     VCheckBoxGroup, VCheckBoxOption
   },
   setup(){
+    const group = ref(null);
+    const fruits = ref(['apple']);
 
-    const select = ref('cake');
+    function a(){
+      group.value.clearAll()
+    }
+    
+    function b(){
+      group.value.selectAll()
+    }
 
     return{
-      select
+      group, fruits, a, b
     }
   }
 }
