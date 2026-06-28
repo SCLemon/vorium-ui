@@ -1,16 +1,17 @@
 import { ref } from 'vue'
 
 export function useVideoVolume(videoRef) {
-    const volume = ref(100)
+    const volume = ref(1)
     const isMuted = ref(false)
-    const previousVolume = ref(100)
+    const previousVolume = ref(1)
+    const hoverVolumeIndex = ref(null);
 
     const setVolume = (value) => {
         volume.value = value
 
         if (!videoRef.value) return
 
-        videoRef.value.volume = value / 100
+        videoRef.value.volume = value; // 0-1
 
         if (value <= 0) {
             isMuted.value = true
@@ -27,15 +28,18 @@ export function useVideoVolume(videoRef) {
 
         if (isMuted.value) {
             setVolume(previousVolume.value)
+            hoverVolumeIndex.value = previousVolume.value * 10;
         }
         else {
             previousVolume.value = volume.value
+            hoverVolumeIndex.value = 0;
             setVolume(0)
         }
     }
 
     return {
         volume,
+        hoverVolumeIndex,
         isMuted,
         setVolume,
         toggleMute

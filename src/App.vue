@@ -1,42 +1,35 @@
 <template>
   <div class="demo-box-wrapper">
     <div class="demo-box">
-      <VCheckBoxGroup ref="group" v-model="fruits">
-          <VCheckBoxOption label="Apple" value="apple" :disabled="true" :hasBorder="true"/>
-          <VCheckBoxOption label="Banana" value="banana" :hasBorder="true"/>
-          <VCheckBoxOption label="Orange" value="orange" :hasBorder="true"/>
-      </VCheckBoxGroup>
-        <button @click="a">1</button>
-        <button @click="b">2</button>
+      <VVideoPlayer :source="source">
+      </VVideoPlayer>
     </div>
   </div>
 </template>
 
 <script>
 
-import { onMounted, ref, watch } from 'vue';
-import VCheckBoxGroup from './components/VCheckBox/VCheckBoxGroup.vue';
-import VCheckBoxOption from './components/VCheckBox/VCheckBoxOption.vue';
+import { reactive } from 'vue';
+import VVideoPlayer from './components/VVideoPlayer/VVideoPlayer.vue';
 
 export default {
   name: 'App',
   components: {
-     VCheckBoxGroup, VCheckBoxOption
+     VVideoPlayer
   },
   setup(){
-    const group = ref(null);
-    const fruits = ref(['apple']);
-
-    function a(){
-      group.value.clearAll()
-    }
-    
-    function b(){
-      group.value.selectAll()
-    }
+        let source = reactive(
+      [
+        {
+          quality: '1080P', // could be any string, such as '高清' and so on...
+          name: '緋雪主題曲', // could be any string
+          src: 'assets/video.mp4' // could be file or url
+        },
+      ]
+    )
 
     return{
-      group, fruits, a, b
+      source
     }
   }
 }

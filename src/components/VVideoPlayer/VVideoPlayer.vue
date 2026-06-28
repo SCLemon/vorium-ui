@@ -9,6 +9,7 @@
         </div>
         <div class="v-video-header-right-wrapper">
             <div class="v-video-header-name">{{ videoName }}</div>
+            <div class="v-video-header-right-slot" v-if="hasSlot('info')"><slot name="info"></slot></div>
         </div>
     </div>
 
@@ -32,9 +33,11 @@
 
             <div class="v-video-controller-right-wrapper">
                 <div class="v-video-controller-volume-wrapper">
-                    <VIcon class="v-video-controller-volume-icon" :icon="isMuted ? VolumeMuteIcon : (volume >= 50 ? VolumeHighIcon : VolumeLowIcon)" :size="20" @click="toggleMute()"></VIcon>
-                    <div class="v-video-controller-volume-lattice-wrapper">
-                        <div class="v-video-controller-volume-lattice" :class="{'v-video-controller-volume-lattice-selected': volume / 10 >= i}" v-for="i in 10" :key="i" @click.stop="handleVolume(i)"></div>
+                    <VIcon class="v-video-controller-volume-icon" :icon="isMuted ? VolumeMuteIcon : (volume >= 0.5 ? VolumeHighIcon : VolumeLowIcon)" :size="20" @click="toggleMute()"></VIcon>
+                    <div class="v-video-controller-volume-lattice-wrapper" @mouseleave="hoverVolumeIndex = volume * 10" @click.stop="handleVolume()">
+                        <div class="v-video-controller-volume-lattice" :class="{'v-video-controller-volume-lattice-selected': i <= (hoverVolumeIndex ?? volume * 10)}" v-for="i in 10" :key="i" 
+                            @mouseenter="hoverVolumeIndex = i">
+                        </div>
                     </div>
                 </div>
                 <div class="v-video-controller-video-speed-wrapper">
@@ -200,8 +203,8 @@ export default {
 
 
         // volume
-        function handleVolume(i){
-            setVolume(i*10);    
+        function handleVolume(){
+            setVolume(hoverVolumeIndex.value / 10);    
         }
 
 
@@ -218,7 +221,7 @@ export default {
         let { isFullscreen, toggleFullscreen } = useVideoFullscreen(wrapperRef);
 
         // video volume
-        let { volume, isMuted, setVolume, toggleMute } = useVideoVolume(videoRef)
+        let { volume, hoverVolumeIndex, isMuted, setVolume, toggleMute } = useVideoVolume(videoRef)
 
         // video speed
         let { speed, setSpeed } = useVideoSpeed(videoRef)
@@ -236,7 +239,7 @@ export default {
             src, wrapperRef, videoRef, duration, currentTime, progress, onLoadedMetadata, onTimeUpdate, start, pause, LogoImg, speedList, handleSpeed, toggleSpeedList, toggleQualityList,
             PlayIcon, PauseIcon, isPlaying, isFullscreen, toggleFullscreen, startDrag, stopDrag, dragTo, formatTime, hasSlot, videoName, showSpeedList, showQualityList, handleQuality,
             FullscreenIcon, ExitFullscreenIcon, progressWrapperRef, toggleLaunch, showTool, isTouchingTool, videoPlayerMouseMove,videoPlayerMouseLeave, videoPlayerMouseEnter,
-            volume, isMuted, setVolume, toggleMute, VolumeHighIcon, handleVolume, VolumeMuteIcon, VolumeLowIcon, speed, setSpeed, ChevronDownIcon, currentQuality
+            volume, isMuted, setVolume, toggleMute, VolumeHighIcon, handleVolume, VolumeMuteIcon, VolumeLowIcon, speed, setSpeed, ChevronDownIcon, currentQuality, hoverVolumeIndex
         }
     }
 }
@@ -299,10 +302,15 @@ export default {
     }
     .v-video-header-right-wrapper{
         margin-left: auto;
+        display: flex;
+        align-items: center;
     }
     .v-video-header-name{
         font-size: 20px;
         color: rgba(200, 200, 200);
+    }
+    .v-video-header-right-slot{
+        margin-left: 15px;
     }
 
 
@@ -444,6 +452,9 @@ export default {
         gap: 4px;
         margin-left: 10px;
         padding-left: 5px;
+    }
+    .v-video-controller-volume-lattice-wrapper:hover{
+        cursor: pointer;
     }
     .v-video-controller-volume-lattice{
         width: 5px;
