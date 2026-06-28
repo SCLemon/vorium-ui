@@ -17,8 +17,17 @@
 
     <div class="v-video-controllers-wrapper" :class="{'v-video-controllers-wrapper-fullscreen': isFullscreen, 'v-video-controllers-wrapper-show': showTool}" @mouseenter="isTouchingTool = true"  @mouseleave="isTouchingTool = false">
         <div class="v-video-controller-progress-wrapper" ref="progressWrapperRef"
+            @mouseenter="handleTrackHover" @mouseleave="handleTrackBlur"  @mousemove="handleTrackHover"
             @pointerdown.stop="startDrag" @pointermove.stop="dragTo" @pointerup.stop="stopDrag" @pointercancel.stop="stopDrag">
-            <div class="v-video-controller-progress-track"></div>
+            <div class="v-video-controller-progress-track" ref="progressTrackRef" >
+                <div class="v-video-controller-progress-track-hover-mask" :style="{width: trackHoverWidth + '%'}">
+                    <div class="v-video-controller-progress-track-hover-mask-dropdown" v-if="showTrackHoverDropdown">
+                        <VDropdown placement="top" width="42px" minHeight="24px">
+                            <div class="v-video-controller-progress-track-hover-mask-dropdown-content">{{ trackHoverTime }}</div>
+                        </VDropdown>
+                    </div>
+                </div>
+            </div>
             <div class="v-video-controller-progress" :style="{ width: progress + '%' }"></div>
             <div class="v-video-controller-progress-controller" :style="{ left: progress + '%' }"></div>
         </div>
@@ -71,7 +80,7 @@
 
 <script>
 
-import { ref, onMounted, nextTick } from 'vue';
+import { ref, onMounted, nextTick, computed } from 'vue';
 import { useVideoProgress } from './hooks/useVideoProgress'
 
 // icons
@@ -94,6 +103,7 @@ import { useVideoSpeed } from './hooks/useVideoSpeed';
 
 // assets
 import LogoImg from './assets/full_logo_trans.png'
+import VDropdown from '../VDropdown.vue';
 
 // slot -> logo, controller
 export default {
@@ -109,15 +119,26 @@ export default {
         }
     },
     components:{
-        VIcon
+        VIcon, VDropdown
     },
     setup(props, context){
         const videoRef = ref();
         const wrapperRef = ref();
         const progressWrapperRef = ref();
+        const progressTrackRef = ref();
         const currentQuality = ref('');
         const videoName = ref('');
         const src = ref('');
+        const hoverVolumeIndex = ref(null);
+        const trackHoverWidth = ref(0);
+        const showTrackHoverDropdown = ref(false)
+        
+        const trackHoverTime = computed(()=>{
+            const percentage = Math.min(100, Math.max(0, trackHoverWidth.value));
+            const seconds = duration.value * (percentage / 100);
+            return formatTime(seconds)
+        })
+
 
         onMounted(()=>{
             let target = props.source[0];
@@ -144,6 +165,18 @@ export default {
             }
 
             return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`
+        }
+
+        // track
+        function handleTrackHover(event){
+            const rect = progressTrackRef.value.getBoundingClientRect()
+            const clickX = event.clientX - rect.left;
+            trackHoverWidth.value = Math.min(100, Math.max(0,(clickX / rect.width) * 100));
+            showTrackHoverDropdown.value = true;
+        }
+        function handleTrackBlur(event){
+            trackHoverWidth.value = 0;
+            showTrackHoverDropdown.value = false;
         }
 
         // speed & quality
@@ -221,7 +254,7 @@ export default {
         let { isFullscreen, toggleFullscreen } = useVideoFullscreen(wrapperRef);
 
         // video volume
-        let { volume, hoverVolumeIndex, isMuted, setVolume, toggleMute } = useVideoVolume(videoRef)
+        let { volume, isMuted, setVolume, toggleMute } = useVideoVolume(videoRef,  hoverVolumeIndex)
 
         // video speed
         let { speed, setSpeed } = useVideoSpeed(videoRef)
@@ -236,10 +269,10 @@ export default {
         }
 
         return {
-            src, wrapperRef, videoRef, duration, currentTime, progress, onLoadedMetadata, onTimeUpdate, start, pause, LogoImg, speedList, handleSpeed, toggleSpeedList, toggleQualityList,
-            PlayIcon, PauseIcon, isPlaying, isFullscreen, toggleFullscreen, startDrag, stopDrag, dragTo, formatTime, hasSlot, videoName, showSpeedList, showQualityList, handleQuality,
-            FullscreenIcon, ExitFullscreenIcon, progressWrapperRef, toggleLaunch, showTool, isTouchingTool, videoPlayerMouseMove,videoPlayerMouseLeave, videoPlayerMouseEnter,
-            volume, isMuted, setVolume, toggleMute, VolumeHighIcon, handleVolume, VolumeMuteIcon, VolumeLowIcon, speed, setSpeed, ChevronDownIcon, currentQuality, hoverVolumeIndex
+            src, wrapperRef, videoRef, progressTrackRef, duration, currentTime, progress, onLoadedMetadata, onTimeUpdate, start, pause, LogoImg, speedList, handleSpeed, toggleSpeedList, toggleQualityList,
+            PlayIcon, PauseIcon, isPlaying, isFullscreen, toggleFullscreen, startDrag, stopDrag, dragTo, formatTime, hasSlot, videoName, showSpeedList, showQualityList, handleQuality, showTrackHoverDropdown,
+            FullscreenIcon, ExitFullscreenIcon, progressWrapperRef, toggleLaunch, showTool, isTouchingTool, videoPlayerMouseMove,videoPlayerMouseLeave, videoPlayerMouseEnter, trackHoverWidth, trackHoverTime,
+            volume, isMuted, setVolume, toggleMute, VolumeHighIcon, handleVolume, VolumeMuteIcon, VolumeLowIcon, speed, setSpeed, ChevronDownIcon, currentQuality, hoverVolumeIndex, handleTrackHover, handleTrackBlur
         }
     }
 }
@@ -329,7 +362,28 @@ export default {
         background: rgba(255,255,255,.12);
         left: 0;
         bottom: 0;
-        transition: height .15s ease, transform .15s ease;;;
+        transition: height .15s ease, transform .15s ease;
+    }
+    .v-video-controller-progress-track-hover-mask{
+        width: 0%;
+        height: 100%;
+        background: rgba(255,255,255,0.15);
+        position: relative;
+    }
+    .v-video-controller-progress-track-hover-mask-dropdown{
+        position: absolute;
+        bottom: calc(100% + 3.5px);
+        left: 100%;
+        transform: translate(-50%, 0);
+    }
+    .v-video-controller-progress-track-hover-mask-dropdown-content{
+        width: 100%;
+        height: 24px;
+        font-size: 10px;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     .v-video-controller-progress{
@@ -353,7 +407,7 @@ export default {
         border-radius: 50%;
         background: white;
         bottom: 1.5px;
-        transform: translate(0%, 50%);
+        transform: translate(-50%, 50%);
         transition: transform .15s ease;
     }
 
@@ -363,12 +417,17 @@ export default {
 
     .v-video-controller-progress-wrapper:hover
     .v-video-controller-progress-controller{
-        transform: translate(0%, 50%) scale(1.1);
+        transform: translate(-50%, 50%) scale(1.1);
     }
 
     .v-video-controller-progress-wrapper:hover
     .v-video-controller-progress-track{
         transform: scaleY(1.5);
+    }
+
+    .v-video-controller-progress-wrapper:hover
+    .v-video-controller-progress-track-hover-mask-dropdown{
+        transform: translateX(-50%) scaleY(calc(1 / 1.5));
     }
 
     .v-video-controller-progress-wrapper:hover
@@ -439,7 +498,6 @@ export default {
     /* volume */
     .v-video-controller-volume-wrapper{
         padding-right: 17.5px;
-        border-right: 0.5px solid rgba(255,255,255,0.2);
         display: flex;
         align-items: center;
         height: 65%;
@@ -475,7 +533,6 @@ export default {
     .v-video-controller-video-speed-wrapper,
     .v-video-controller-video-quality-wrapper
     {
-        border-right: 0.5px solid rgba(255,255,255,0.2);
         padding-left: 12px;
         padding-right: 12px;
         font-size: 14px;

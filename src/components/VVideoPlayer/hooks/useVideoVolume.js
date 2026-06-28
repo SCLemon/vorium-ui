@@ -1,10 +1,9 @@
 import { ref } from 'vue'
 
-export function useVideoVolume(videoRef) {
+export function useVideoVolume(videoRef, hoverVolumeIndex) {
     const volume = ref(1)
     const isMuted = ref(false)
     const previousVolume = ref(1)
-    const hoverVolumeIndex = ref(null);
 
     const setVolume = (value) => {
         volume.value = value
@@ -39,7 +38,6 @@ export function useVideoVolume(videoRef) {
 
     return {
         volume,
-        hoverVolumeIndex,
         isMuted,
         setVolume,
         toggleMute
