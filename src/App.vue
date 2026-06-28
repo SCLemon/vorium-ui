@@ -1,34 +1,33 @@
 <template>
   <div class="demo-box-wrapper">
     <div class="demo-box">
-      <VVideoPlayer :source="source">
-      </VVideoPlayer>
+      <VSlider v-model="progress" :tipText="handleTipText"></VSlider>
     </div>
   </div>
 </template>
 
 <script>
 
-import { reactive } from 'vue';
+import { ref } from 'vue';
 import VVideoPlayer from './components/VVideoPlayer/VVideoPlayer.vue';
+import VSlider from './components/VSlider/VSlider.vue';
 export default {
   name: 'App',
   components: {
-     VVideoPlayer
+     VVideoPlayer, VSlider
   },
   setup(){
-        let source = reactive(
-      [
-        {
-          quality: '1080P', // could be any string, such as '高清' and so on...
-          name: '緋雪主題曲', // could be any string
-          src: 'assets/video.mp4' // could be file or url
-        },
-      ]
-    )
+    const progress = ref(50)
+
+    function handleTipText(value) {
+        if (value === 0) return '靜音';
+        if (value < 33) return '低音量';
+        if (value < 66) return '中音量';
+        return '高音量';
+    }
 
     return{
-      source
+      progress, handleTipText
     }
   }
 }
@@ -51,6 +50,7 @@ body{
   justify-content: space-evenly;
   align-items: center;
   gap: 40px;
+  width: 300px;
 }
 
 </style>

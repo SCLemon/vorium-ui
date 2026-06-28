@@ -3,24 +3,28 @@
         <div class="v-slider-prepend-slot" v-if="hasSlot('prepend')" :style="{marginRight: circleRadius}"><slot name="prepend"></slot></div>
         <div class="v-slider-controller-progress-wrapper" ref="progressWrapperRef" :style="{height : `calc(${height} + 10px)`}"
             :class="{ 'v-slider-controller-progress-wrapper-is-disabled': disabled }"
-            @pointerdown.stop="startDrag" @pointermove.stop="dragTo" @pointerup.stop="stopDrag" @pointercancel.stop="stopDrag">
-            <div class="v-slider-controller-progress-track" :style="{ height }"></div>
+            @pointerdown.stop="startDrag" @pointermove.stop="dragTo" @pointerup.stop="stopDrag" @pointercancel.stop="stopDrag"
+            @mouseenter="handleTrackHover" @mouseleave="handleTrackBlur"  @mousemove="handleTrackHover">
+            <div class="v-slider-controller-progress-track" ref="progressTrackRef" :style="{ height }">
+                <div class="v-slider-controller-progress-track-hover-mask" :style="{width: trackHoverWidth + '%'}">
+                    <div class="v-slider-controller-progress-track-hover-mask-dropdown" v-if="showTips && showTrackHoverDropdown">
+                        <VDropdown placement="top" minHeight="22.5px" width="fit-content">
+                            <div class="v-slider-value">{{ displayTipText }}</div>
+                        </VDropdown>
+                    </div>
+                </div>
+            </div>
             
             <div class="v-slider-controller-progress" :class="{ 'v-slider-controller-progress-is-disabled': disabled }" :style="{ width: progress + '%', height, background: (disabled ? disabledColor: color)}"></div>
             
-            <div class="v-slider-controller-progress-controller" :style="{ left: progress + '%', background: (disabled ? disabledColor: color), height: circleRadius }"
-            @mouseenter="isHover = true" @mouseleave="isHover = false">
-                <VDropdown class="v-slider-controller-progress-controller-dropdown" placement="top" minHeight="22.5px" width="40px" v-if="showTips && (isHover || isDragging)">
-                    <div class="v-slider-value">{{ tipText || progress.toFixed(1) }}</div>
-                </VDropdown>
-            </div>
+            <div class="v-slider-controller-progress-controller" :style="{ left: progress + '%', background: (disabled ? disabledColor: color), height: circleRadius }"></div>
         </div>
         <div class="v-slider-append-slot" v-if="hasSlot('append')" :style="{marginLeft: circleRadius}"><slot name="append"></slot></div>
     </div>
 </template>
 
 <script>
-import { ref, useModel } from 'vue';
+import { ref, useModel, computed } from 'vue';
 import { useSliderProgress } from './hooks/useSliderProgress.js'
 import VDropdown from '../VDropdown.vue';
 export default {
@@ -59,25 +63,54 @@ export default {
             default: true,
         },
         tipText:{
-            type: String,
-            default: ''
+            type: Function,
+            default: null
         },
     },
     setup(props, context){
         const progressWrapperRef = ref(null);
-        const isHover = ref(false);
-        
-        const progress = useModel(props, 'modelValue', context.emit);
+        const progressTrackRef = ref();
+        const trackHoverWidth = ref(0);
+        const showTrackHoverDropdown = ref(false)
+
+        const trackHoverValue = computed(()=>{
+            return Math.min(100, Math.max(0, trackHoverWidth.value));
+        })
 
         // v-model
+        const progress = useModel(props, 'modelValue', context.emit);
+
         let { startDrag, stopDrag, dragTo, isDragging } = useSliderProgress(progressWrapperRef, progress, props);
         
         function hasSlot(name){
             return !!context.slots[name];
         }
 
+        // tipText
+        const displayTipText = computed(() => {
+
+            if(props.tipText){
+                return props.tipText(trackHoverValue.value)
+            }
+
+            return trackHoverValue.value.toFixed(1)
+        })
+
+        // track
+        function handleTrackHover(event){
+            const rect = progressTrackRef.value.getBoundingClientRect()
+            const clickX = event.clientX - rect.left;
+            trackHoverWidth.value = Math.min(100, Math.max(0,(clickX / rect.width) * 100));
+            showTrackHoverDropdown.value = true;
+        }
+        function handleTrackBlur(event){
+            trackHoverWidth.value = 0;
+            showTrackHoverDropdown.value = false;
+        }
+
         return {
-            progress, isHover, progressWrapperRef, startDrag, stopDrag, dragTo, isDragging, hasSlot
+            progress, progressWrapperRef, progressTrackRef, startDrag, stopDrag, dragTo, isDragging, hasSlot, handleTrackHover, handleTrackBlur, 
+            showTrackHoverDropdown, trackHoverWidth, trackHoverValue, displayTipText
         }
     }
 }
@@ -120,6 +153,19 @@ export default {
         transform-origin: center;
     }
 
+    .v-slider-controller-progress-track-hover-mask{
+        width: 0%;
+        height: 100%;
+        background: rgba(255,255,255,0.15);
+        position: relative;
+    }
+    .v-slider-controller-progress-track-hover-mask-dropdown{
+        position: absolute;
+        bottom: calc(100% + 13px);
+        left: 100%;
+        transform: translate(-50%, 0);
+    }
+
     .v-slider-controller-progress-controller{
         position: absolute;
         aspect-ratio: 1/1;
@@ -130,11 +176,6 @@ export default {
 
         transform: translate(-50%, -50%);
         transition: transform .15s ease;
-    }
-    .v-slider-controller-progress-controller-dropdown{
-        position: absolute;
-        bottom: calc(100% + 11.5px);
-        transform: translateX(-12.75px);
     }
 
     .v-slider-controller-progress-wrapper:hover{
@@ -160,11 +201,13 @@ export default {
 
     .v-slider-value{
         font-size: 10px;
-        width: 100%;
         height: 100%;
         line-height: 22.5px;
         text-align: center;
         color: white;
+        white-space: nowrap;
+        padding-left: 10px;
+        padding-right: 10px;
     }
 
     /* slot */
