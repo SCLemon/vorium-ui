@@ -11,7 +11,6 @@
 
 import { reactive } from 'vue';
 import VVideoPlayer from './components/VVideoPlayer/VVideoPlayer.vue';
-
 export default {
   name: 'App',
   components: {

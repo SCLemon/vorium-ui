@@ -9,7 +9,9 @@
         </div>
         <div class="v-video-header-right-wrapper">
             <div class="v-video-header-name">{{ videoName }}</div>
-            <div class="v-video-header-right-slot" v-if="hasSlot('info')"><slot name="info"></slot></div>
+            <div class="v-video-header-right-slot" v-if="hasSlot('info')">
+                <slot name="info"></slot>
+            </div>
         </div>
     </div>
 
@@ -93,7 +95,6 @@ import VolumeHighIcon from '../../icons/VolumeHighIcon.vue';
 import VolumeMuteIcon from '../../icons/VolumeMuteIcon.vue';
 import VolumeLowIcon from '../../icons/VolumeLowIcon.vue';
 import ChevronDownIcon from '../../icons/ChevronDownIcon.vue';
-
 // hooks
 import { useVideoLaunch } from './hooks/useVideoLaunch';
 import { useVideoFullscreen } from './hooks/useVideoFullScreen'
@@ -105,7 +106,7 @@ import { useVideoSpeed } from './hooks/useVideoSpeed';
 import LogoImg from './assets/full_logo_trans.png'
 import VDropdown from '../VDropdown.vue';
 
-// slot -> logo, controller
+// slot -> logo, controller, info
 export default {
     name:'VVideoPlayer',
     props:{
@@ -272,7 +273,7 @@ export default {
             src, wrapperRef, videoRef, progressTrackRef, duration, currentTime, progress, onLoadedMetadata, onTimeUpdate, start, pause, LogoImg, speedList, handleSpeed, toggleSpeedList, toggleQualityList,
             PlayIcon, PauseIcon, isPlaying, isFullscreen, toggleFullscreen, startDrag, stopDrag, dragTo, formatTime, hasSlot, videoName, showSpeedList, showQualityList, handleQuality, showTrackHoverDropdown,
             FullscreenIcon, ExitFullscreenIcon, progressWrapperRef, toggleLaunch, showTool, isTouchingTool, videoPlayerMouseMove,videoPlayerMouseLeave, videoPlayerMouseEnter, trackHoverWidth, trackHoverTime,
-            volume, isMuted, setVolume, toggleMute, VolumeHighIcon, handleVolume, VolumeMuteIcon, VolumeLowIcon, speed, setSpeed, ChevronDownIcon, currentQuality, hoverVolumeIndex, handleTrackHover, handleTrackBlur
+            volume, isMuted, setVolume, toggleMute, VolumeHighIcon, handleVolume, VolumeMuteIcon, VolumeLowIcon, speed, setSpeed, ChevronDownIcon, currentQuality, hoverVolumeIndex, handleTrackHover, handleTrackBlur,
         }
     }
 }
@@ -344,6 +345,8 @@ export default {
     }
     .v-video-header-right-slot{
         margin-left: 15px;
+        display: flex;
+        align-items: center;
     }
 
 

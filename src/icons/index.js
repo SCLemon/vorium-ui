@@ -33,6 +33,22 @@ export { default as VolumeHighIcon } from './VolumeHighIcon.vue'
 export { default as VolumeLowIcon } from './VolumeLowIcon.vue'
 export { default as VolumeMuteIcon } from './VolumeMuteIcon.vue'
 
+export { default as QuestionFilledIcon } from './QuestionFilledIcon.vue'
+export { default as InfoFilledIcon } from './InfoFilledIcon.vue'
+export { default as CheckFilledIcon } from './CheckFilledIcon.vue'
+export { default as CloseFilledIcon } from './CloseFilledIcon.vue'
+export { default as ExclamationFilledIcon } from './ExclamationFilledIcon.vue'
+export { default as PlusFilledIcon } from './PlusFilledIcon.vue'
+export { default as MinusFilledIcon } from './MinusFilledIcon.vue'
+
+export { default as QuestionCircleIcon } from './QuestionCircleIcon.vue'
+export { default as InfoCircleIcon } from './InfoCircleIcon.vue'
+export { default as CheckCircleIcon } from './CheckCircleIcon.vue'
+export { default as CloseCircleIcon } from './CloseCircleIcon.vue'
+export { default as ExclamationCircleIcon } from './ExclamationCircleIcon.vue'
+export { default as MinusCircleIcon } from './MinusCircleIcon.vue'
+export { default as PlusCircleIcon } from './PlusCircleIcon.vue'
+
 
 
 
