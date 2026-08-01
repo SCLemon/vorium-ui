@@ -49,6 +49,11 @@ export { default as ExclamationCircleIcon } from './ExclamationCircleIcon.vue'
 export { default as MinusCircleIcon } from './MinusCircleIcon.vue'
 export { default as PlusCircleIcon } from './PlusCircleIcon.vue'
 
+export { default as ToolIcon } from './ToolIcon.vue'
+export { default as CalendarIcon } from './CalendarIcon.vue'
+export { default as BookIcon } from './BookIcon.vue'
+export { default as SettingIcon } from './SettingIcon.vue'
+
 
 
 

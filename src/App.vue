@@ -1,7 +1,9 @@
 <template>
   <div class="demo-box-wrapper">
     <div class="demo-box">
-      <VSlider v-model="progress" :tipText="handleTipText"></VSlider>
+      <VIcon :icon="BookIcon" :size="24"></VIcon>
+      <VIcon :icon="ToolIcon" :size="24"></VIcon>
+      <VIcon :icon="RecordIcon" :size="24"></VIcon>
     </div>
   </div>
 </template>
@@ -9,25 +11,20 @@
 <script>
 
 import { ref } from 'vue';
-import VVideoPlayer from './components/VVideoPlayer/VVideoPlayer.vue';
-import VSlider from './components/VSlider/VSlider.vue';
+import BookIcon from './icons/BookIcon.vue';
+import ToolIcon from './icons/ToolIcon.vue';
+import CalendarIcon from './icons/CalendarIcon.vue';
+import SettingIcon from './icons/SettingIcon.vue';
+import VIcon from './components/VIcon.vue';
 export default {
   name: 'App',
   components: {
-     VVideoPlayer, VSlider
+    VIcon
   },
   setup(){
-    const progress = ref(50)
-
-    function handleTipText(value) {
-        if (value === 0) return '靜音';
-        if (value < 33) return '低音量';
-        if (value < 66) return '中音量';
-        return '高音量';
-    }
 
     return{
-      progress, handleTipText
+        BookIcon, ToolIcon, CalendarIcon, SettingIcon
     }
   }
 }
@@ -51,6 +48,7 @@ body{
   align-items: center;
   gap: 40px;
   width: 300px;
+  color: white;
 }
 
 </style>
