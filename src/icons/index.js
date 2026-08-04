@@ -53,6 +53,7 @@ export { default as ToolIcon } from './ToolIcon.vue'
 export { default as CalendarIcon } from './CalendarIcon.vue'
 export { default as BookIcon } from './BookIcon.vue'
 export { default as SettingIcon } from './SettingIcon.vue'
+export { default as ChartLineIcon } from './ChartLineIcon.vue'
 
 
 

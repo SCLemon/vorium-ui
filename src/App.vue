@@ -1,9 +1,7 @@
 <template>
   <div class="demo-box-wrapper">
     <div class="demo-box">
-      <VIcon :icon="BookIcon" :size="24"></VIcon>
-      <VIcon :icon="ToolIcon" :size="24"></VIcon>
-      <VIcon :icon="RecordIcon" :size="24"></VIcon>
+      <VIcon :icon="ChartLineIcon" :size="32"></VIcon>
     </div>
   </div>
 </template>
@@ -11,10 +9,8 @@
 <script>
 
 import { ref } from 'vue';
-import BookIcon from './icons/BookIcon.vue';
-import ToolIcon from './icons/ToolIcon.vue';
-import CalendarIcon from './icons/CalendarIcon.vue';
-import SettingIcon from './icons/SettingIcon.vue';
+import ChartLineIcon from './icons/ChartLineIcon.vue';
+
 import VIcon from './components/VIcon.vue';
 export default {
   name: 'App',
@@ -24,7 +20,7 @@ export default {
   setup(){
 
     return{
-        BookIcon, ToolIcon, CalendarIcon, SettingIcon
+        ChartLineIcon
     }
   }
 }
