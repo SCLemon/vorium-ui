@@ -55,7 +55,13 @@ export { default as BookIcon } from './BookIcon.vue'
 export { default as SettingIcon } from './SettingIcon.vue'
 export { default as ChartLineIcon } from './ChartLineIcon.vue'
 
+export { default as FileIcon } from './FileIcon.vue'
+export { default as FolderIcon } from './FolderIcon.vue'
+export { default as MoreVerticalIcon } from './MoreVerticalIcon.vue'
 
+export { default as SettingsIcon } from './SettingsIcon.vue'
+export { default as HomeUnlockIcon } from './HomeUnlockIcon.vue'
+export { default as FlaskIcon } from './FlaskIcon.vue'
 
 
 

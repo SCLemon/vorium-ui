@@ -1,7 +1,7 @@
 <template>
   <div class="demo-box-wrapper">
     <div class="demo-box">
-      <VIcon :icon="ChartLineIcon" :size="32"></VIcon>
+      <!-- <VIcon :icon="CalendarUserIcon" :size="32"></VIcon> -->
     </div>
   </div>
 </template>
@@ -9,7 +9,7 @@
 <script>
 
 import { ref } from 'vue';
-import ChartLineIcon from './icons/ChartLineIcon.vue';
+// import CalendarUserIcon from './icons/CalendarUserIcon.vue';
 
 import VIcon from './components/VIcon.vue';
 export default {
@@ -20,7 +20,7 @@ export default {
   setup(){
 
     return{
-        ChartLineIcon
+        // CalendarUserIcon
     }
   }
 }
