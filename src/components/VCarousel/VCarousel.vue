@@ -1,10 +1,10 @@
 <template>
     <div class="v-carousel-wrapper" :class="{'v-carousel-wrapper-is-opacity':isOpacity}" :style="{ aspectRatio }" @mouseenter="isHover = true" @mouseleave="isHover = false">
         <div class="v-carousel-go-button-wrapper v-carousel-go-previous">
-            <VButton class="v-carousel-go-button" circle type="ghost" @click.stop="goPrevious" v-if="currentIndex != 0"><VIcon :icon="ChevronLeftIcon"></VIcon></VButton>
+            <VButton class="v-carousel-go-button" circle type="ghost" @click.stop="goPrevious" v-if="currentIndex > 0"><VIcon :icon="ChevronLeftIcon"></VIcon></VButton>
         </div>
         <div class="v-carousel-go-button-wrapper v-carousel-go-next" >
-            <VButton class="v-carousel-go-button" circle type="ghost" @click.stop="goNext" v-if="currentIndex != itemsLength - 1"><VIcon :icon="ChevronRightIcon"></VIcon></VButton>
+            <VButton class="v-carousel-go-button" circle type="ghost" @click.stop="goNext" v-if="currentIndex < itemsLength - 1"><VIcon :icon="ChevronRightIcon"></VIcon></VButton>
         </div>
         <div class="v-carousel" ref="carouselRef">
             <slot></slot>
@@ -12,7 +12,7 @@
         <div class="v-carousel-indicator-wrapper" v-if="(itemsLength > 1) && indicators">
             <div class="v-carousel-indicator-track" :style="{transform: `translateX(-${indicatorOffset}px)`}">
                 <div class="v-carousel-indicator" @click="goToSection(i-1)" v-for="i in itemsLength" :key="i">
-                    <div class="v-carousel-indicator-item" :class="{'v-carousel-indicator-item-selected': currentIndex == (i - 1)}"></div>
+                    <div class="v-carousel-indicator-item" :class="{'v-carousel-indicator-item-selected': currentIndex === (i - 1)}"></div>
                 </div>
             </div>
         </div>
@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { computed, onUnmounted, ref, useSlots, watch } from 'vue';
+import { computed, onMounted, onUnmounted, onUpdated, ref, useSlots, watch, Fragment, Comment, Text } from 'vue';
 import VIcon from '../VIcon.vue';
 import ChevronLeftIcon from '../../icons/ChevronLeftIcon.vue';
 import ChevronRightIcon from '../../icons/ChevronRightIcon.vue';
@@ -49,23 +49,54 @@ export default {
     components:{
         VIcon, VButton
     },
-    setup(props, context){
+    setup(props){
 
-        const carouselRef = ref();
+        const carouselRef = ref(null);
         const currentIndex = ref(0);
         const isHover = ref(false);
-        const isOpacity = ref(false); // 從最後一頁換到第一頁使用
+        const isOpacity = ref(false);
 
-        // 獲取 slot 數量
         const slots = useSlots();
-        const itemsLength = computed(() => {
-            return slots.default?.().length ?? 0
-        })
+        const slotUpdateTrigger = ref(0);
 
+        function getValidChildren(vnodes) {
+            const result = [];
+            for (const vnode of vnodes) {
+                if (!vnode) continue;
+                if (vnode.type === Fragment) {
+                    if (Array.isArray(vnode.children)) {
+                        result.push(...getValidChildren(vnode.children));
+                    }
+                } else if (vnode.type !== Comment) {
+                    if (vnode.type === Text && typeof vnode.children === 'string' && !vnode.children.trim()) {
+                        continue;
+                    }
+                    result.push(vnode);
+                }
+            }
+            return result;
+        }
+
+        // 當 slot 內部重新 render 時，觸發 trigger 確保計算更新
+        onUpdated(() => {
+            slotUpdateTrigger.value++;
+            // 避免外部刪減項目後 index 越界
+            if (currentIndex.value >= itemsLength.value && itemsLength.value > 0) {
+                currentIndex.value = itemsLength.value - 1;
+            }
+        });
+
+        const itemsLength = computed(() => {
+            // 訂閱 trigger 以保證父組件更新 items 時自動重算
+            void slotUpdateTrigger.value;
+            const defaultNodes = slots.default?.() || [];
+            return getValidChildren(defaultNodes).length;
+        });
 
         // 換頁
         function goNext(){
-            const items = carouselRef.value.children;
+            const items = carouselRef.value?.children;
+            if (!items) return;
             const next = items[currentIndex.value + 1];
             if (next) {
                 carouselRef.value.scrollTo({ left: next.offsetLeft, behavior: 'smooth' });
@@ -74,98 +105,95 @@ export default {
         }
         
         function goPrevious(){
-            const items = carouselRef.value.children;
+            const items = carouselRef.value?.children;
+            if (!items) return;
             const previous = items[currentIndex.value - 1];
             if (previous) {
                 carouselRef.value.scrollTo({ left: previous.offsetLeft, behavior: 'smooth' });
                 currentIndex.value--;
             }
         }
+
         function goToSection(index){
-            const items = carouselRef.value.children;
+            const items = carouselRef.value?.children;
+            if (!items) return;
             const section = items[index];
             if (section) {
-                if((currentIndex.value == items.length - 1) && index == 0){
+                if((currentIndex.value === items.length - 1) && index === 0){
                     isOpacity.value = true;
                     setTimeout(() => {
                         currentIndex.value = index;
-                        carouselRef.value.scrollLeft = 0;
+                        if (carouselRef.value) carouselRef.value.scrollLeft = 0;
                         isOpacity.value = false;
                     }, 400);
-                    return
+                    return;
                 }
-                else {
-                    carouselRef.value.scrollTo({ left: section.offsetLeft, behavior: 'smooth' });
-                }
+                carouselRef.value.scrollTo({ left: section.offsetLeft, behavior: 'smooth' });
                 currentIndex.value = index;
             }
         }
 
-        // 最多顯示三個 indicator
         const indicatorOffset = computed(() => {
-
             const itemWidth = 48;
-
             const startIndex = Math.max(0, currentIndex.value - 1);
             return startIndex * itemWidth;
-        })
+        });
 
-        
-        // 自動輪播
         let timer = null;
 
-        watch([() => props.autoPlay, () => props.interval], (value) => {
-            if(value[0]){
-                startAutoPlay();
-            }
-            else{
-                stopAutoPlay();
-            }
-        },{ immediate: true })
-
-        watch(isHover, (hover)=>{
-            
-            if(!props.autoPlay) return;
-            
-            // 當 Hover 時，自動重置
-            if(hover) stopAutoPlay();
-            else startAutoPlay();
-        })
-
         function startAutoPlay(){
-
-            stopAutoPlay(); // 清除正在執行的 timer 確保同時只有一個 timer 在運行
+            stopAutoPlay();
+            if (!props.autoPlay || itemsLength.value <= 1) return;
 
             timer = setInterval(() => {
-                if(isHover.value) return;
+                if (isHover.value) return;
 
-                if(currentIndex.value == (itemsLength.value - 1)){
-                    goToSection(0)
+                if (currentIndex.value >= (itemsLength.value - 1)) {
+                    goToSection(0);
+                } else {
+                    goNext();
                 }
-                else goNext();
-
             }, props.interval);
         }
 
         function stopAutoPlay(){
-            if(timer){
-                clearInterval(timer)
+            if (timer) {
+                clearInterval(timer);
                 timer = null;
             }
         }
 
-        onUnmounted(()=>{
+        watch([() => props.autoPlay, () => props.interval, itemsLength], () => {
+            if (props.autoPlay) startAutoPlay();
+            else stopAutoPlay();
+        }, { immediate: true });
+
+        watch(isHover, (hover) => {
+            if (!props.autoPlay) return;
+            if (hover) stopAutoPlay();
+            else startAutoPlay();
+        });
+
+        onUnmounted(() => {
             stopAutoPlay();
-        })
+        });
 
-
-        return{
-            carouselRef, goNext, goPrevious, goToSection, ChevronLeftIcon, ChevronRightIcon, currentIndex, itemsLength, indicatorOffset, isHover, isOpacity
-        }
+        return {
+            carouselRef,
+            goNext,
+            goPrevious,
+            goToSection,
+            ChevronLeftIcon,
+            ChevronRightIcon,
+            currentIndex,
+            itemsLength,
+            indicatorOffset,
+            isHover,
+            isOpacity
+        };
     }
 }
 </script>
-
 <style>
 
     /* General*/
